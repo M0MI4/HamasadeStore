@@ -1,1 +1,1094 @@
 
+```html
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>HamaSade Store | ستۆری حەمەسادی</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Vazirmatn', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen pb-20 transition-colors duration-150">
+
+  <!-- SIMPLE CLEAN HEADER -->
+  <header class="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+      <!-- Brand (Tap HS logo 5 times or click lock icon to open Admin Login) -->
+      <div id="brandLogoTrigger" class="flex items-center gap-2.5 cursor-pointer" title="ستۆری حەمەسادی">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-sm shadow-sm">
+          HS
+        </div>
+        <div>
+          <h1 class="font-extrabold text-base leading-none text-slate-900 dark:text-white">حەمەسادی</h1>
+          <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">ستۆری ئەپە مۆدکراوەکان</span>
+        </div>
+      </div>
+
+      <!-- Right Controls: Theme + Subtle Admin Lock -->
+      <div class="flex items-center gap-2">
+        <!-- Admin Status Badge (Only shown when HamaSade is logged in) -->
+        <button id="openStudioBtn" class="hidden px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold items-center gap-1 shadow-sm">
+          <span>+ زیادکردن</span>
+        </button>
+
+        <button id="adminLogoutBtn" class="hidden px-2.5 py-1.5 rounded-xl bg-rose-500/15 text-rose-500 text-xs font-bold">
+          دەرچوون لە ئەدمین
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200" title="گۆڕینی ڕووکار">
+          <svg id="themeIconSun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="themeIconMoon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+
+        <!-- Subtle Lock Icon for Admin Access -->
+        <button id="adminLockBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-emerald-500" title="چوونەژوورەوەی بەڕێوەبەر">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Clean Search Bar -->
+    <div id="globalSearchWrapper" class="max-w-3xl mx-auto px-4 pb-3">
+      <div class="relative flex items-center">
+        <svg class="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="گەڕان بۆ ئەپ یان یاری..."
+          class="w-full pr-10 pl-16 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-emerald-500 focus:outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400"
+        />
+        <button id="clearSearchBtn" class="hidden absolute left-3 text-xs text-rose-500 font-bold">سڕینەوە</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ADMIN ACTIVE BANNER (Only visible when HamaSade logs in) -->
+  <div id="adminActiveBar" class="hidden bg-amber-500/15 border-b border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs py-2 px-4">
+    <div class="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <span class="font-bold">👑 دۆخی بەڕێوەبەر چالاکە — دەتوانیت ئەپ و هەواڵ زیاد بکەیت، دەستکارییان بکەیت یان بیانسڕیتەوە.</span>
+      <div class="flex items-center gap-2">
+        <button id="downloadUpdatedHtmlBtn" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold">💾 داگرتنی کۆدی نوێی HTML</button>
+        <button id="changePassBtn" class="px-2.5 py-1 rounded-lg bg-slate-800 text-white font-bold">🔑 گۆڕینی وشەی نهێنی</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-3xl mx-auto px-4 pt-3 space-y-4">
+
+    <!-- ==================== TAB 1: APPS (ئەپەکان) ==================== -->
+    <section id="tab-store" class="space-y-3.5">
+      <!-- Simple Categories -->
+      <div id="categoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+        <button data-cat="all" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-emerald-600 text-white">هەمووی</button>
+        <button data-cat="games" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">🎮 یارییەکان</button>
+        <button data-cat="media" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">🎬 ڤیدیۆ و دیزاین</button>
+        <button data-cat="social" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">💬 سۆشیاڵ</button>
+        <button data-cat="tools" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">🛠️ ئامراز</button>
+      </div>
+
+      <!-- Clean Apps List -->
+      <div id="appsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+      <!-- Empty State -->
+      <div id="appsEmptyState" class="hidden rounded-2xl p-8 text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <p class="text-sm font-bold text-slate-600 dark:text-slate-300">هیچ ئەپێک نەدۆزرایەوە</p>
+        <button id="resetFiltersBtn" class="mt-3 px-4 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">پیشاندانی هەمووی</button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: NEWS (هەواڵ و زانیاری) ==================== -->
+    <section id="tab-news" class="hidden space-y-3">
+      <div id="newsGrid" class="space-y-3"></div>
+    </section>
+
+    <!-- ==================== TAB 3: SAVED & DOWNLOADS (دڵخواز و داگرتن) ==================== -->
+    <section id="tab-downloads" class="hidden space-y-4">
+      <!-- Active Downloads -->
+      <div class="rounded-2xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-extrabold text-sm">⬇️ داگرتنەکان</h3>
+          <button id="clearCompletedDlBtn" class="text-xs text-rose-500 font-bold">پاککردنەوە</button>
+        </div>
+        <div id="downloadsList" class="space-y-2"></div>
+      </div>
+
+      <!-- Favorites -->
+      <div class="rounded-2xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+        <h3 class="font-extrabold text-sm">❤️ ئەپە دڵخوازەکان</h3>
+        <div id="favoritesList" class="space-y-2"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== APP DETAILS MODAL (Clean & Focused) ==================== -->
+  <div id="appDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-4">
+      <div id="appDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- ==================== NEWS READER MODAL ==================== -->
+  <div id="newsDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-4">
+      <div id="newsDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN LOGIN MODAL (Only for HamaSade) ==================== -->
+  <div id="adminLoginModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-xs rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-4 text-center">
+      <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center mx-auto font-black text-xl">🔒</div>
+      <div>
+        <h3 class="font-extrabold text-base">چوونەژوورەوەی بەڕێوەبەر</h3>
+        <p class="text-xs text-slate-500 mt-0.5">تایبەت بە خاوەنی ستۆر (حەمەسادی)</p>
+      </div>
+      <form id="adminLoginForm" class="space-y-3">
+        <input id="adminPassInput" type="password" required placeholder="وشەی نهێنی بنووسە..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center text-sm font-bold focus:outline-none focus:border-emerald-500" />
+        <div class="flex gap-2">
+          <button type="button" id="closeAdminLoginBtn" class="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold">داخستن</button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-extrabold">چوونەژوورەوە</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== CHANGE PASSWORD MODAL ==================== -->
+  <div id="changePassModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-xs rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-4 text-center">
+      <h3 class="font-extrabold text-base">🔑 گۆڕینی وشەی نهێنی بەڕێوەبەر</h3>
+      <form id="changePassForm" class="space-y-3">
+        <input id="newAdminPassInput" type="text" required placeholder="وشەی نهێنی نوێ بنووسە..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center text-sm font-bold" />
+        <div class="flex gap-2">
+          <button type="button" id="closeChangePassBtn" class="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold">پاشگەزبوونەوە</button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-extrabold">پاشەکەوتکردن</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN ADD / EDIT MODAL (تەنها بۆ حەمەسادی) ==================== -->
+  <div id="studioModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="w-full sm:max-w-md max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <h3 id="studioModalTitle" class="font-extrabold text-base">⚡ پانێڵی کۆنتڕۆڵی حەمەسادی</h3>
+        <button id="closeStudioModalBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold">✕</button>
+      </div>
+
+      <!-- Mode Switch -->
+      <div class="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+        <button id="studioTabAppBtn" class="py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white">ئەپ / یاری</button>
+        <button id="studioTabNewsBtn" class="py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300">هەواڵ / زانیاری</button>
+      </div>
+
+      <!-- Add / Edit App Form -->
+      <form id="addAppForm" class="space-y-3 text-xs">
+        <input id="editAppId" type="hidden" value="" />
+        <div>
+          <label class="block font-bold mb-1">ناوی ئەپ یان یاری *</label>
+          <input id="newAppName" required type="text" placeholder="بۆ نموونە: CapCut Pro" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold mb-1">بەش *</label>
+            <select id="newAppCat" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <option value="media">🎬 ڤیدیۆ و دیزاین</option>
+              <option value="games">🎮 یارییەکان</option>
+              <option value="social">💬 سۆشیاڵ</option>
+              <option value="tools">🛠️ ئامراز</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-1">کورتەی ئایکۆن (٢ پیت)</label>
+            <input id="newAppIcon" type="text" maxlength="3" placeholder="CC" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-bold mb-1">وەشان *</label>
+            <input id="newAppVer" required type="text" placeholder="v14.0" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+          </div>
+          <div>
+            <label class="block font-bold mb-1">قەبارە (MB) *</label>
+            <input id="newAppSize" required type="number" step="0.1" placeholder="120" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">تایبەتمەندی مۆد *</label>
+          <input id="newAppModTag" required type="text" placeholder="PRO کراوە + بێ ڕیکلام" class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">لینکی ڕاستەوخۆی داگرتن (APK / Telegram / MediaFire) *</label>
+          <input id="newAppUrl" required type="text" placeholder="https://t.me/hamasade/..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">ڕوونکردنەوەی کورت *</label>
+          <textarea id="newAppDesc" required rows="2" placeholder="زانیاری لەسەر ئەپەکە..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"></textarea>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs">
+          پاشەکەوتکردنی ئەپ
+        </button>
+      </form>
+
+      <!-- Add / Edit News Form -->
+      <form id="addNewsForm" class="hidden space-y-3 text-xs">
+        <input id="editNewsId" type="hidden" value="" />
+        <div>
+          <label class="block font-bold mb-1">سەردێڕی هەواڵ یان زانیاری *</label>
+          <input id="newNewsTitle" required type="text" placeholder="سەردێڕ..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+        </div>
+        <div>
+          <label class="block font-bold mb-1">ناوەڕۆکی بابەت *</label>
+          <textarea id="newNewsBody" required rows="4" placeholder="وردەکاری بابەتەکە..." class="w-full px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs">
+          پاشەکەوتکردنی هەواڵ
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastBox" class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2 rounded-xl bg-slate-900 dark:bg-emerald-600 text-white text-xs font-bold shadow-lg">
+    <span id="toastText"></span>
+  </div>
+
+  <!-- SIMPLE 3-TAB BOTTOM NAVIGATION -->
+  <nav class="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-slate-200 dark:border-slate-800">
+    <div class="max-w-md mx-auto grid grid-cols-3 px-3 py-1.5">
+      <button data-tab="store" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-xl text-emerald-600 dark:text-emerald-400 font-extrabold">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span class="text-[11px] mt-0.5">ئەپەکان</span>
+      </button>
+
+      <button data-tab="news" class="nav-tab-btn flex flex-col items-center justify-center py-1 rounded-xl text-slate-500 dark:text-slate-400 font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+        <span class="text-[11px] mt-0.5">هەواڵ و زانیاری</span>
+      </button>
+
+      <button data-tab="downloads" class="nav-tab-btn relative flex flex-col items-center justify-center py-1 rounded-xl text-slate-500 dark:text-slate-400 font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        <span class="text-[11px] mt-0.5">داگرتنەکانم</span>
+        <span id="navDlDot" class="hidden absolute top-1 left-8 w-2 h-2 rounded-full bg-emerald-500"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    (function () {
+      'use strict';
+
+      const storage = {
+        get(key, fallback) {
+          try {
+            const raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : fallback;
+          } catch (e) {
+            return fallback;
+          }
+        },
+        set(key, val) {
+          try {
+            localStorage.setItem(key, JSON.stringify(val));
+          } catch (e) {}
+        }
+      };
+
+      /*DATA_START*/
+      const DEFAULT_ADMIN_PASS = "hamasade";
+
+      const DEFAULT_APPS = [
+        {
+          id: 'capcut-pro-hs',
+          name: 'CapCut Pro Mod',
+          category: 'media',
+          version: 'v13.8.0',
+          sizeMB: 142,
+          modTag: 'PRO کراوە + فۆنتی کوردی + بێ لۆگۆ',
+          gradient: 'from-slate-800 to-indigo-900',
+          iconText: 'CC',
+          downloadUrl: 'https://t.me/hamasade',
+          description: 'تەواوی فلتەر و تێمپلەیتە پڕۆکان کراونەتەوە لەگەڵ فۆنتی کوردی و هەناردەکردنی 4K.'
+        },
+        {
+          id: 'insta-aero-hs',
+          name: 'InstaPro HamaSade',
+          category: 'social',
+          version: 'v11.45',
+          sizeMB: 79,
+          modTag: 'داگرتنی ستۆری و ڕیڵس + دۆخی شاراوە',
+          gradient: 'from-pink-600 to-purple-800',
+          iconText: 'IG',
+          downloadUrl: 'https://t.me/hamasade',
+          description: 'داگرتنی ڤیدیۆ و ستۆری بە یەک کلیک و سەیرکردنی نامە بەبێ دەرکەوتنی Seen.'
+        },
+        {
+          id: 'gta-sa-kurdish',
+          name: 'GTA: San Andreas Mod',
+          category: 'games',
+          version: 'v2.11',
+          sizeMB: 640,
+          modTag: 'پارەی بێسنوور + مێنوی فێڵ (Cleo)',
+          gradient: 'from-amber-600 to-orange-800',
+          iconText: 'GTA',
+          downloadUrl: 'https://t.me/hamasade',
+          description: 'وەشانی تایبەتی مۆبایل بە مێنوی فێڵ و کارکردن لەسەر هەموو ئەندرۆیدە نوێیەکان.'
+        },
+        {
+          id: 'spotify-x-hs',
+          name: 'Spotify Premium Mod',
+          category: 'media',
+          version: 'v8.9.84',
+          sizeMB: 68,
+          modTag: 'بێ ڕیکلام + دەنگی کوالێتی بەرز',
+          gradient: 'from-emerald-600 to-green-900',
+          iconText: 'SP',
+          downloadUrl: 'https://t.me/hamasade',
+          description: 'گوێگرتن لە گۆرانییەکان بە کوالێتی بەرز بەبێ هیچ ڕیکلامێکی بێزارکەر.'
+        },
+        {
+          id: 'minecraft-pe-hs',
+          name: 'Minecraft PE Unlocked',
+          category: 'games',
+          version: 'v1.21.40',
+          sizeMB: 215,
+          modTag: 'هەموو سکینەکان کراوەن + ئۆنڵاین',
+          gradient: 'from-lime-600 to-emerald-900',
+          iconText: 'MC',
+          downloadUrl: 'https://t.me/hamasade',
+          description: 'مارکێتپلەیس و سکینەکان کراونەتەوە و ئامادەیە بۆ یاریکردن لەگەڵ هاوڕێکانت.'
+        },
+        {
+          id: 'zarchiver-pro-hs',
+          name: 'ZArchiver Pro',
+          category: 'tools',
+          version: 'v1.0.10',
+          sizeMB: 12,
+          modTag: 'وەشانی پڕۆ + کردنەوەی خێرای ZIP و XAPK',
+          gradient: 'from-teal-600 to-emerald-900',
+          iconText: 'ZA',
+          downloadUrl: 'https://t.me/hamasade',
+          description: 'باشترین بەرنامە بۆ کردنەوەی فایلە زیپەکان و دامەزراندنی یارییە گەورەکان.'
+        }
+      ];
+
+      const DEFAULT_NEWS = [
+        {
+          id: 'news-1',
+          title: 'چۆنیەتی چارەسەرکردنی کێشەی دانەمەزراندنی ئەپ (App Not Installed)',
+          date: '٢٠٢٦/١٠/٣١',
+          body: '١. سەرەتا وەشانی کۆنی بەرنامەکە لەسەر مۆبایلەکەت بسڕەوە.\n٢. لە ناو Play Store بەشی Play Protect ناچالاک بکە.\n٣. دڵنیابە شوێنی بەتاڵ لە میمۆری مۆبایلەکەت هەیە.'
+        },
+        {
+          id: 'news-2',
+          title: 'بەخێربێن بۆ ستۆری فەرمی حەمەسادی (HamaSade)',
+          date: '٢٠٢٦/١٠/٣٠',
+          body: 'لێرەدا ڕۆژانە نوێترین ئەپ و یارییە مۆدکراوەکانی ئەندرۆید بە لینکی ڕاستەوخۆ و بەبێ ڕیکلامی بێزارکەر دادەنرێت.'
+        }
+      ];
+      /*DATA_END*/
+
+      let state = {
+        activeTab: 'store',
+        selectedCat: 'all',
+        searchQuery: '',
+        isAdmin: false,
+        adminPass: storage.get('hs_admin_pass', DEFAULT_ADMIN_PASS),
+        theme: storage.get('hs_theme', 'dark'),
+        apps: storage.get('hs_apps_clean', DEFAULT_APPS),
+        news: storage.get('hs_news_clean', DEFAULT_NEWS),
+        favorites: storage.get('hs_favs_clean', []),
+        downloads: storage.get('hs_downloads_clean', [])
+      };
+
+      let toastTimer = null;
+      function showToast(msg) {
+        const box = document.getElementById('toastBox');
+        const txt = document.getElementById('toastText');
+        txt.textContent = msg;
+        box.classList.remove('hidden');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => box.classList.add('hidden'), 2500);
+      }
+
+      function applyTheme() {
+        const htmlEl = document.documentElement;
+        if (state.theme === 'dark') {
+          htmlEl.classList.add('dark');
+          document.getElementById('themeIconSun').classList.remove('hidden');
+          document.getElementById('themeIconMoon').classList.add('hidden');
+        } else {
+          htmlEl.classList.remove('dark');
+          document.getElementById('themeIconSun').classList.add('hidden');
+          document.getElementById('themeIconMoon').classList.remove('hidden');
+        }
+      }
+
+      function updateAdminUI() {
+        const studioBtn = document.getElementById('openStudioBtn');
+        const logoutBtn = document.getElementById('adminLogoutBtn');
+        const lockBtn = document.getElementById('adminLockBtn');
+        const activeBar = document.getElementById('adminActiveBar');
+
+        if (state.isAdmin) {
+          studioBtn.classList.remove('hidden');
+          studioBtn.classList.add('inline-flex');
+          logoutBtn.classList.remove('hidden');
+          lockBtn.classList.add('hidden');
+          activeBar.classList.remove('hidden');
+        } else {
+          studioBtn.classList.add('hidden');
+          studioBtn.classList.remove('inline-flex');
+          logoutBtn.classList.add('hidden');
+          lockBtn.classList.remove('hidden');
+          activeBar.classList.add('hidden');
+        }
+        renderApps();
+        renderNews();
+      }
+
+      function switchTab(tabName) {
+        state.activeTab = tabName;
+        ['store', 'news', 'downloads'].forEach(t => {
+          document.getElementById('tab-' + t).classList.toggle('hidden', t !== tabName);
+        });
+
+        document.getElementById('globalSearchWrapper').classList.toggle('hidden', tabName === 'downloads');
+
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+          const active = btn.getAttribute('data-tab') === tabName;
+          btn.className = 'nav-tab-btn relative flex flex-col items-center justify-center py-1 rounded-xl ' +
+            (active ? 'text-emerald-600 dark:text-emerald-400 font-extrabold' : 'text-slate-500 dark:text-slate-400 font-medium');
+        });
+
+        if (tabName === 'store') renderApps();
+        if (tabName === 'news') renderNews();
+        if (tabName === 'downloads') renderDownloadsAndFavs();
+      }
+
+      function renderApps() {
+        const grid = document.getElementById('appsGrid');
+        const empty = document.getElementById('appsEmptyState');
+        const q = state.searchQuery.trim().toLowerCase();
+
+        const filtered = state.apps.filter(app => {
+          const matchCat = state.selectedCat === 'all' || app.category === state.selectedCat;
+          const matchQ = !q || app.name.toLowerCase().includes(q) || app.modTag.toLowerCase().includes(q);
+          return matchCat && matchQ;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '';
+          empty.classList.remove('hidden');
+          return;
+        }
+        empty.classList.add('hidden');
+
+        grid.innerHTML = filtered.map(app => {
+          return `
+            <div class="rounded-2xl p-3.5 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex flex-col justify-between gap-3 shadow-sm">
+              <div class="flex items-center gap-3">
+                <div data-detail-id="${app.id}" class="open-detail-btn w-13 h-13 w-12 h-12 rounded-2xl bg-gradient-to-br ${app.gradient || 'from-emerald-600 to-teal-900'} flex items-center justify-center text-white font-black text-sm shrink-0 cursor-pointer">
+                  ${app.iconText || 'HS'}
+                </div>
+                <div data-detail-id="${app.id}" class="open-detail-btn min-w-0 flex-1 cursor-pointer">
+                  <h3 class="font-extrabold text-sm truncate">${app.name}</h3>
+                  <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold truncate mt-0.5">✨ ${app.modTag}</p>
+                  <p class="text-[11px] text-slate-400 mt-0.5">${app.version} • ${app.sizeMB} MB</p>
+                </div>
+                <button data-dl-id="${app.id}" class="start-dl-btn px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shrink-0">
+                  داگرتن
+                </button>
+              </div>
+
+              ${state.isAdmin ? `
+                <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2 text-[11px]">
+                  <button data-edit-app="${app.id}" class="edit-app-btn px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-500 font-bold">✏️ دەستکاری</button>
+                  <button data-del-app="${app.id}" class="del-app-btn px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-500 font-bold">🗑️ سڕینەوە</button>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      function openAppDetail(appId) {
+        const app = state.apps.find(a => a.id === appId);
+        if (!app) return;
+        const isFav = state.favorites.includes(app.id);
+        const modal = document.getElementById('appDetailModal');
+        const content = document.getElementById('appDetailContent');
+
+        content.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${app.gradient || 'from-emerald-600 to-teal-900'} flex items-center justify-center text-white font-black text-lg">
+                ${app.iconText || 'HS'}
+              </div>
+              <div>
+                <h2 class="font-black text-base">${app.name}</h2>
+                <p class="text-xs text-slate-400">${app.version} • ${app.sizeMB} MB</p>
+              </div>
+            </div>
+            <button id="closeAppDetailBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold">✕</button>
+          </div>
+
+          <div class="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-xs space-y-1">
+            <div class="font-extrabold text-emerald-600 dark:text-emerald-400">تایبەتمەندی مۆد:</div>
+            <div class="font-bold">${app.modTag}</div>
+          </div>
+
+          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${app.description}</p>
+
+          <div class="flex gap-2 pt-1">
+            <button data-dl-id="${app.id}" class="modal-dl-btn flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs">
+              ⬇️ داگرتنی ڕاستەوخۆ (APK)
+            </button>
+            <button data-fav-id="${app.id}" class="modal-fav-btn px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs font-bold ${isFav ? 'text-rose-500 bg-rose-500/10' : ''}">
+              ${isFav ? '♥ دڵخوازە' : '♡ دڵخواز'}
+            </button>
+          </div>
+        `;
+
+        modal.classList.remove('hidden');
+        document.getElementById('closeAppDetailBtn').addEventListener('click', () => modal.classList.add('hidden'));
+        content.querySelector('.modal-dl-btn').addEventListener('click', () => {
+          startDownload(app.id);
+          modal.classList.add('hidden');
+        });
+        content.querySelector('.modal-fav-btn').addEventListener('click', () => {
+          toggleFavorite(app.id);
+          openAppDetail(app.id);
+        });
+      }
+
+      function startDownload(appId) {
+        const app = state.apps.find(a => a.id === appId);
+        if (!app) return;
+
+        if (app.downloadUrl && app.downloadUrl.startsWith('http')) {
+          window.open(app.downloadUrl, '_blank', 'noopener');
+        }
+
+        const dlEntry = {
+          id: 'dl-' + Date.now(),
+          appId: app.id,
+          name: app.name,
+          version: app.version,
+          sizeMB: app.sizeMB,
+          progress: 100
+        };
+
+        state.downloads = [dlEntry, ...state.downloads.filter(d => d.appId !== app.id)];
+        storage.set('hs_downloads_clean', state.downloads);
+        document.getElementById('navDlDot').classList.remove('hidden');
+        showToast(`داگرتنی ${app.name} دەستی پێکرد ⬇️`);
+      }
+
+      function toggleFavorite(appId) {
+        const idx = state.favorites.indexOf(appId);
+        if (idx > -1) {
+          state.favorites.splice(idx, 1);
+          showToast('لە دڵخوازەکان لادرا');
+        } else {
+          state.favorites.push(appId);
+          showToast('خرایە لیستی دڵخوازەکان ❤️');
+        }
+        storage.set('hs_favs_clean', state.favorites);
+        if (state.activeTab === 'downloads') renderDownloadsAndFavs();
+      }
+
+      function renderNews() {
+        const grid = document.getElementById('newsGrid');
+        const q = state.searchQuery.trim().toLowerCase();
+        const list = state.news.filter(n => !q || n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q));
+
+        if (list.length === 0) {
+          grid.innerHTML = `<div class="p-6 rounded-2xl text-center text-xs text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">هیچ هەواڵێک نییە</div>`;
+          return;
+        }
+
+        grid.innerHTML = list.map(n => `
+          <div class="rounded-2xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-slate-400">
+              <span class="text-emerald-500 font-bold">📰 هەواڵ و فێرکاری</span>
+              <span>${n.date}</span>
+            </div>
+            <h3 class="font-extrabold text-sm">${n.title}</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">${n.body}</p>
+            <div class="pt-1 flex items-center justify-between">
+              <button data-read-news="${n.id}" class="read-news-btn text-xs font-extrabold text-emerald-500">خوێندنەوەی زیاتر ←</button>
+              ${state.isAdmin ? `
+                <div class="flex items-center gap-2 text-[11px]">
+                  <button data-edit-news="${n.id}" class="edit-news-btn px-2 py-1 rounded-lg bg-amber-500/15 text-amber-500 font-bold">✏️ دەستکاری</button>
+                  <button data-del-news="${n.id}" class="del-news-btn px-2 py-1 rounded-lg bg-rose-500/15 text-rose-500 font-bold">🗑️ سڕینەوە</button>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function openNewsDetail(newsId) {
+        const item = state.news.find(n => n.id === newsId);
+        if (!item) return;
+        const modal = document.getElementById('newsDetailModal');
+        const content = document.getElementById('newsDetailContent');
+
+        content.innerHTML = `
+          <div class="flex items-start justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div>
+              <h2 class="font-black text-base">${item.title}</h2>
+              <p class="text-[11px] text-slate-400 mt-0.5">${item.date}</p>
+            </div>
+            <button id="closeNewsModalBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold shrink-0">✕</button>
+          </div>
+          <div class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-loose whitespace-pre-line">${item.body}</div>
+        `;
+        modal.classList.remove('hidden');
+        document.getElementById('closeNewsModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
+      }
+
+      function renderDownloadsAndFavs() {
+        const dlList = document.getElementById('downloadsList');
+        const favList = document.getElementById('favoritesList');
+
+        if (state.downloads.length === 0) {
+          dlList.innerHTML = `<div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-center text-xs text-slate-400">هیچ ئەپێکت دانەگرتووە</div>`;
+        } else {
+          dlList.innerHTML = state.downloads.map(d => `
+            <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/70 flex items-center justify-between text-xs">
+              <div>
+                <div class="font-bold">${d.name}</div>
+                <div class="text-[11px] text-slate-400">${d.version} • ${d.sizeMB} MB</div>
+              </div>
+              <button data-dl-id="${d.appId}" class="start-dl-btn px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-bold">داگرتنەوە</button>
+            </div>
+          `).join('');
+        }
+
+        const favApps = state.apps.filter(a => state.favorites.includes(a.id));
+        if (favApps.length === 0) {
+          favList.innerHTML = `<div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/50 text-center text-xs text-slate-400">لیستی دڵخوازەکان بەتاڵە</div>`;
+        } else {
+          favList.innerHTML = favApps.map(app => `
+            <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/70 flex items-center justify-between text-xs">
+              <div class="font-bold">${app.name}</div>
+              <div class="flex items-center gap-1.5">
+                <button data-dl-id="${app.id}" class="start-dl-btn px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold">داگرتن</button>
+                <button data-fav-id="${app.id}" class="fav-toggle-btn px-2 py-1 rounded-lg bg-rose-500/15 text-rose-500 font-bold">✕</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Export full self-contained HTML with updated apps/news baked in for HamaSade's WebView app!
+      function exportUpdatedHtmlFile() {
+        const currentHtml = document.documentElement.outerHTML;
+        const newDataBlock =
+          '/*DATA_START*/\n' +
+          '      const DEFAULT_ADMIN_PASS = ' + JSON.stringify(state.adminPass) + ';\n\n' +
+          '      const DEFAULT_APPS = ' + JSON.stringify(state.apps, null, 2) + ';\n\n' +
+          '      const DEFAULT_NEWS = ' + JSON.stringify(state.news, null, 2) + ';\n' +
+          '      /*DATA_END*/';
+
+        const updatedHtml = '<!DOCTYPE html>\n' + currentHtml.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//, newDataBlock);
+        const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'hamasade_store_updated.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('فایلی نوێی HTML داگیرا! بیخەرە ناو ئەپەکەت 💾');
+      }
+
+      // Open Studio in Add or Edit mode
+      function openStudioForApp(appToEdit) {
+        const studioModal = document.getElementById('studioModal');
+        const addAppForm = document.getElementById('addAppForm');
+        const addNewsForm = document.getElementById('addNewsForm');
+        addAppForm.classList.remove('hidden');
+        addNewsForm.classList.add('hidden');
+        document.getElementById('studioTabAppBtn').className = 'py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white';
+        document.getElementById('studioTabNewsBtn').className = 'py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300';
+
+        if (appToEdit) {
+          document.getElementById('editAppId').value = appToEdit.id;
+          document.getElementById('newAppName').value = appToEdit.name;
+          document.getElementById('newAppCat').value = appToEdit.category;
+          document.getElementById('newAppIcon').value = appToEdit.iconText || '';
+          document.getElementById('newAppVer').value = appToEdit.version;
+          document.getElementById('newAppSize').value = appToEdit.sizeMB;
+          document.getElementById('newAppModTag').value = appToEdit.modTag;
+          document.getElementById('newAppUrl').value = appToEdit.downloadUrl;
+          document.getElementById('newAppDesc').value = appToEdit.description;
+        } else {
+          addAppForm.reset();
+          document.getElementById('editAppId').value = '';
+        }
+        studioModal.classList.remove('hidden');
+      }
+
+      function openStudioForNews(newsToEdit) {
+        const studioModal = document.getElementById('studioModal');
+        const addAppForm = document.getElementById('addAppForm');
+        const addNewsForm = document.getElementById('addNewsForm');
+        addNewsForm.classList.remove('hidden');
+        addAppForm.classList.add('hidden');
+        document.getElementById('studioTabNewsBtn').className = 'py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white';
+        document.getElementById('studioTabAppBtn').className = 'py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300';
+
+        if (newsToEdit) {
+          document.getElementById('editNewsId').value = newsToEdit.id;
+          document.getElementById('newNewsTitle').value = newsToEdit.title;
+          document.getElementById('newNewsBody').value = newsToEdit.body;
+        } else {
+          addNewsForm.reset();
+          document.getElementById('editNewsId').value = '';
+        }
+        studioModal.classList.remove('hidden');
+      }
+
+      function initEvents() {
+        // Theme toggle
+        document.getElementById('themeToggleBtn').addEventListener('click', () => {
+          state.theme = state.theme === 'dark' ? 'light' : 'dark';
+          storage.set('hs_theme', state.theme);
+          applyTheme();
+        });
+
+        // Secret 5-tap on brand logo OR click on lock icon opens Admin Login
+        let logoTapCount = 0;
+        let logoTapTimer = null;
+        document.getElementById('brandLogoTrigger').addEventListener('click', () => {
+          logoTapCount += 1;
+          if (logoTapTimer) clearTimeout(logoTapTimer);
+          if (logoTapCount >= 5) {
+            logoTapCount = 0;
+            if (!state.isAdmin) {
+              document.getElementById('adminLoginModal').classList.remove('hidden');
+            }
+          } else {
+            logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1200);
+          }
+        });
+
+        document.getElementById('adminLockBtn').addEventListener('click', () => {
+          document.getElementById('adminLoginModal').classList.remove('hidden');
+          document.getElementById('adminPassInput').focus();
+        });
+
+        document.getElementById('closeAdminLoginBtn').addEventListener('click', () => {
+          document.getElementById('adminLoginModal').classList.add('hidden');
+        });
+
+        // Admin Login Submit
+        document.getElementById('adminLoginForm').addEventListener('submit', e => {
+          e.preventDefault();
+          const entered = document.getElementById('adminPassInput').value.trim();
+          if (entered === state.adminPass) {
+            state.isAdmin = true;
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('adminLoginModal').classList.add('hidden');
+            updateAdminUI();
+            showToast('بەخێربێیت حەمەسادی! دۆخی بەڕێوەبەر چالاک کرا 👑');
+          } else {
+            showToast('❌ وشەی نهێنی هەڵەیە!');
+          }
+        });
+
+        // Admin Logout
+        document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+          state.isAdmin = false;
+          updateAdminUI();
+          showToast('لە دۆخی بەڕێوەبەر دەرچوویت 🔒');
+        });
+
+        // Change Admin Password
+        document.getElementById('changePassBtn').addEventListener('click', () => {
+          document.getElementById('changePassModal').classList.remove('hidden');
+        });
+        document.getElementById('closeChangePassBtn').addEventListener('click', () => {
+          document.getElementById('changePassModal').classList.add('hidden');
+        });
+        document.getElementById('changePassForm').addEventListener('submit', e => {
+          e.preventDefault();
+          const np = document.getElementById('newAdminPassInput').value.trim();
+          if (!np) return;
+          state.adminPass = np;
+          storage.set('hs_admin_pass', np);
+          document.getElementById('newAdminPassInput').value = '';
+          document.getElementById('changePassModal').classList.add('hidden');
+          showToast('وشەی نهێنی بەڕێوەبەر گۆڕدرا 🔑');
+        });
+
+        // Download updated HTML file
+        document.getElementById('downloadUpdatedHtmlBtn').addEventListener('click', exportUpdatedHtmlFile);
+
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+        searchInput.addEventListener('input', e => {
+          state.searchQuery = e.target.value;
+          clearSearchBtn.classList.toggle('hidden', !state.searchQuery);
+          if (state.activeTab === 'news') renderNews();
+          else renderApps();
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+          state.searchQuery = '';
+          searchInput.value = '';
+          clearSearchBtn.classList.add('hidden');
+          renderApps();
+          renderNews();
+        });
+
+        document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+          state.searchQuery = '';
+          state.selectedCat = 'all';
+          searchInput.value = '';
+          clearSearchBtn.classList.add('hidden');
+          updateCategoryPills();
+          renderApps();
+        });
+
+        // Category pills
+        document.getElementById('categoryFilterBar').addEventListener('click', e => {
+          const btn = e.target.closest('.cat-btn');
+          if (!btn) return;
+          state.selectedCat = btn.getAttribute('data-cat');
+          updateCategoryPills();
+          renderApps();
+        });
+
+        // Bottom Nav
+        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            if (tab === 'downloads') document.getElementById('navDlDot').classList.add('hidden');
+            switchTab(tab);
+          });
+        });
+
+        // Delegated actions inside main
+        document.querySelector('main').addEventListener('click', e => {
+          const dlBtn = e.target.closest('.start-dl-btn');
+          if (dlBtn) {
+            startDownload(dlBtn.getAttribute('data-dl-id'));
+            return;
+          }
+
+          const detailBtn = e.target.closest('.open-detail-btn');
+          if (detailBtn) {
+            openAppDetail(detailBtn.getAttribute('data-detail-id'));
+            return;
+          }
+
+          const favBtn = e.target.closest('.fav-toggle-btn');
+          if (favBtn) {
+            toggleFavorite(favBtn.getAttribute('data-fav-id'));
+            return;
+          }
+
+          const readNewsBtn = e.target.closest('.read-news-btn');
+          if (readNewsBtn) {
+            openNewsDetail(readNewsBtn.getAttribute('data-read-news'));
+            return;
+          }
+
+          // Admin Edit / Delete App
+          const editAppBtn = e.target.closest('.edit-app-btn');
+          if (editAppBtn && state.isAdmin) {
+            const app = state.apps.find(a => a.id === editAppBtn.getAttribute('data-edit-app'));
+            if (app) openStudioForApp(app);
+            return;
+          }
+
+          const delAppBtn = e.target.closest('.del-app-btn');
+          if (delAppBtn && state.isAdmin) {
+            const id = delAppBtn.getAttribute('data-del-app');
+            state.apps = state.apps.filter(a => a.id !== id);
+            storage.set('hs_apps_clean', state.apps);
+            renderApps();
+            showToast('ئەپەکە سڕایەوە 🗑️');
+            return;
+          }
+
+          // Admin Edit / Delete News
+          const editNewsBtn = e.target.closest('.edit-news-btn');
+          if (editNewsBtn && state.isAdmin) {
+            const item = state.news.find(n => n.id === editNewsBtn.getAttribute('data-edit-news'));
+            if (item) openStudioForNews(item);
+            return;
+          }
+
+          const delNewsBtn = e.target.closest('.del-news-btn');
+          if (delNewsBtn && state.isAdmin) {
+            const id = delNewsBtn.getAttribute('data-del-news');
+            state.news = state.news.filter(n => n.id !== id);
+            storage.set('hs_news_clean', state.news);
+            renderNews();
+            showToast('هەواڵەکە سڕایەوە 🗑️');
+          }
+        });
+
+        document.getElementById('clearCompletedDlBtn').addEventListener('click', () => {
+          state.downloads = [];
+          storage.set('hs_downloads_clean', []);
+          renderDownloadsAndFavs();
+          showToast('لیستی داگرتن پاککرایەوە');
+        });
+
+        // Studio Modal Events
+        const studioModal = document.getElementById('studioModal');
+        const addAppForm = document.getElementById('addAppForm');
+        const addNewsForm = document.getElementById('addNewsForm');
+
+        document.getElementById('openStudioBtn').addEventListener('click', () => {
+          if (!state.isAdmin) return;
+          openStudioForApp(null);
+        });
+
+        document.getElementById('closeStudioModalBtn').addEventListener('click', () => {
+          studioModal.classList.add('hidden');
+        });
+
+        document.getElementById('studioTabAppBtn').addEventListener('click', () => openStudioForApp(null));
+        document.getElementById('studioTabNewsBtn').addEventListener('click', () => openStudioForNews(null));
+
+        addAppForm.addEventListener('submit', e => {
+          e.preventDefault();
+          if (!state.isAdmin) return;
+          const editId = document.getElementById('editAppId').value;
+          const name = document.getElementById('newAppName').value.trim();
+          const category = document.getElementById('newAppCat').value;
+          const iconText = (document.getElementById('newAppIcon').value.trim() || name.slice(0, 2)).toUpperCase();
+          const version = document.getElementById('newAppVer').value.trim();
+          const sizeMB = parseFloat(document.getElementById('newAppSize').value) || 50;
+          const modTag = document.getElementById('newAppModTag').value.trim();
+          const downloadUrl = document.getElementById('newAppUrl').value.trim();
+          const description = document.getElementById('newAppDesc').value.trim();
+
+          if (editId) {
+            const idx = state.apps.findIndex(a => a.id === editId);
+            if (idx > -1) {
+              state.apps[idx] = { ...state.apps[idx], name, category, iconText, version, sizeMB, modTag, downloadUrl, description };
+            }
+            showToast('گۆڕانکارییەکان پاشەکەوت کران ✅');
+          } else {
+            state.apps.unshift({
+              id: 'hs-app-' + Date.now(),
+              name,
+              category,
+              iconText,
+              version,
+              sizeMB,
+              modTag,
+              gradient: 'from-emerald-600 to-teal-900',
+              downloadUrl,
+              description
+            });
+            showToast('ئەپی نوێ زیاد کرا 🎉');
+          }
+
+          storage.set('hs_apps_clean', state.apps);
+          studioModal.classList.add('hidden');
+          switchTab('store');
+        });
+
+        addNewsForm.addEventListener('submit', e => {
+          e.preventDefault();
+          if (!state.isAdmin) return;
+          const editId = document.getElementById('editNewsId').value;
+          const title = document.getElementById('newNewsTitle').value.trim();
+          const body = document.getElementById('newNewsBody').value.trim();
+
+          if (editId) {
+            const idx = state.news.findIndex(n => n.id === editId);
+            if (idx > -1) {
+              state.news[idx] = { ...state.news[idx], title, body };
+            }
+            showToast('هەواڵەکە نوێکرایەوە ✅');
+          } else {
+            state.news.unshift({
+              id: 'news-' + Date.now(),
+              title,
+              date: new Date().toLocaleDateString('ckb'),
+              body
+            });
+            showToast('هەواڵی نوێ بڵاوکرایەوە 📰');
+          }
+
+          storage.set('hs_news_clean', state.news);
+          studioModal.classList.add('hidden');
+          switchTab('news');
+        });
+
+        // Close modals on backdrop click
+        ['appDetailModal', 'newsDetailModal', 'studioModal', 'adminLoginModal', 'changePassModal'].forEach(mid => {
+          const el = document.getElementById(mid);
+          el.addEventListener('click', e => {
+            if (e.target === el) el.classList.add('hidden');
+          });
+        });
+      }
+
+      function updateCategoryPills() {
+        document.querySelectorAll('.cat-btn').forEach(b => {
+          const active = b.getAttribute('data-cat') === state.selectedCat;
+          b.className = 'cat-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap ' +
+            (active
+              ? 'bg-emerald-600 text-white'
+              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300');
+        });
+      }
+
+      applyTheme();
+      initEvents();
+      renderApps();
+    })();
+  </script>
+</body>
+</html>
+```
