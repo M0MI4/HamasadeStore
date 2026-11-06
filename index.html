@@ -24,17 +24,22 @@
     * {
       -webkit-tap-highlight-color: transparent;
       box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
     }
-    input, textarea {
-      user-select: text;
-      -webkit-user-select: text;
+    html {
+      height: auto;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
     }
-    html, body {
+    body {
       font-family: 'Vazirmatn', 'Inter', system-ui, -apple-system, sans-serif;
-      overscroll-behavior-y: none;
       overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
+    .no-scrollbar {
+      touch-action: pan-x pan-y;
+      -webkit-overflow-scrolling: touch;
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -1848,4 +1853,4 @@
     })();
   </script>
 </body>
-        </html>
+</html>
