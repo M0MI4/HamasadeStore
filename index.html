@@ -25,20 +25,9 @@
       -webkit-tap-highlight-color: transparent;
       box-sizing: border-box;
     }
-    html {
-      height: auto;
-      overflow-y: scroll;
-      -webkit-overflow-scrolling: touch;
-    }
-    body {
+    html, body {
       font-family: 'Vazirmatn', 'Inter', system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-y;
-    }
-    .no-scrollbar {
-      touch-action: pan-x pan-y;
       -webkit-overflow-scrolling: touch;
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -233,7 +222,7 @@
 
   <!-- ==================== NATIVE BOTTOM SHEET: APP DETAILS ==================== -->
   <div id="appDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="sheet-animate w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border-t sm:border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
+    <div class="modal-sheet sheet-animate w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border-t sm:border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
       <div class="w-10 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto sm:hidden"></div>
       <div id="appDetailContent"></div>
     </div>
@@ -241,7 +230,7 @@
 
   <!-- ==================== NATIVE BOTTOM SHEET: NEWS READER ==================== -->
   <div id="newsDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="sheet-animate w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border-t sm:border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
+    <div class="modal-sheet sheet-animate w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border-t sm:border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
       <div class="w-10 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto sm:hidden"></div>
       <div id="newsDetailContent"></div>
     </div>
@@ -281,7 +270,7 @@
 
   <!-- ==================== ADMIN STUDIO MODAL (تەنها بۆ حەمەسادی) ==================== -->
   <div id="studioModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="sheet-animate w-full sm:max-w-md max-h-[90vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
+    <div class="modal-sheet sheet-animate w-full sm:max-w-md max-h-[90vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
         <h3 id="studioModalTitle" class="font-extrabold text-base">⚡ پانێڵی کۆنتڕۆڵی حەمەسادی</h3>
         <button id="closeStudioModalBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold">✕</button>
@@ -1560,7 +1549,123 @@
         document.getElementById('themeToggleBtn').addEventListener('click', () => {
           state.theme = state.theme === 'dark' ? 'light' : 'dark';
           storage.set('hs_theme_v4', state.theme);
-          applyTheme();
+    
+      // ==================== 1-FINGER ANDROID WEBVIEW TOUCH SCROLL ENGINE ====================
+      // Fixes Android WebView / SwipeRefreshLayout / ScrollView wrappers that intercept 1-finger vertical swipes
+      function initOneFingerTouchScroll() {
+        let startX = 0;
+        let startY = 0;
+        let lastY = 0;
+        let lastTime = 0;
+        let velocityY = 0;
+        let lockAxis = null; // 'v' for vertical, 'h' for horizontal
+        let activeScroller = null;
+        let momentumId = null;
+        let isTouching = false;
+
+        function stopMomentum() {
+          if (momentumId) {
+            cancelAnimationFrame(momentumId);
+            momentumId = null;
+          }
+        }
+
+        function scrollTargetBy(dy) {
+          if (activeScroller) {
+            activeScroller.scrollTop += dy;
+          } else {
+            window.scrollBy(0, dy);
+          }
+        }
+
+        document.addEventListener('touchstart', function (e) {
+          stopMomentum();
+          if (e.touches.length !== 1) {
+            isTouching = false;
+            lockAxis = null;
+            return;
+          }
+          isTouching = true;
+          lockAxis = null;
+          velocityY = 0;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+          lastY = startY;
+          lastTime = performance.now();
+          activeScroller = e.target.closest('.modal-sheet');
+        }, { passive: true });
+
+        document.addEventListener('touchmove', function (e) {
+          if (!isTouching || e.touches.length !== 1) return;
+
+          const curX = e.touches[0].clientX;
+          const curY = e.touches[0].clientY;
+          const totalDx = Math.abs(curX - startX);
+          const totalDy = Math.abs(curY - startY);
+
+          if (!lockAxis) {
+            if (totalDx > 7 && totalDx > totalDy * 1.15) {
+              // Horizontal swipe (e.g. featured carousel or category pills): let native horizontal swipe work
+              lockAxis = 'h';
+              return;
+            } else if (totalDy > 5) {
+              lockAxis = 'v';
+            } else {
+              return;
+            }
+          }
+
+          if (lockAxis === 'v') {
+            // Calling preventDefault() forces Android WebView to call requestDisallowInterceptTouchEvent(true)
+            // on the parent Android container so 1-finger vertical scroll is never blocked!
+            if (e.cancelable) {
+              e.preventDefault();
+            }
+            const now = performance.now();
+            const dt = Math.max(now - lastTime, 8);
+            const stepY = lastY - curY;
+
+            scrollTargetBy(stepY);
+
+            const instantVel = stepY / dt;
+            velocityY = velocityY * 0.65 + instantVel * 0.35;
+            lastY = curY;
+            lastTime = now;
+          }
+        }, { passive: false });
+
+        function onTouchEnd() {
+          if (!isTouching) return;
+          isTouching = false;
+
+          if (lockAxis === 'v' && Math.abs(velocityY) > 0.12) {
+            let currentVel = velocityY * 16; // pixels per 16ms frame
+            const scrollerRef = activeScroller;
+
+            function momentumStep() {
+              if (Math.abs(currentVel) < 0.5) {
+                momentumId = null;
+                return;
+              }
+              if (scrollerRef) {
+                scrollerRef.scrollTop += currentVel;
+              } else {
+                window.scrollBy(0, currentVel);
+              }
+              currentVel *= 0.94; // smooth friction
+              momentumId = requestAnimationFrame(momentumStep);
+            }
+            momentumId = requestAnimationFrame(momentumStep);
+          }
+          lockAxis = null;
+        }
+
+        document.addEventListener('touchend', onTouchEnd, { passive: true });
+        document.addEventListener('touchcancel', onTouchEnd, { passive: true });
+      }
+
+      initOneFingerTouchScroll();
+      applyTheme();
         });
 
         let logoTapCount = 0;
@@ -1853,4 +1958,4 @@
     })();
   </script>
 </body>
-</html>
+  </html>
