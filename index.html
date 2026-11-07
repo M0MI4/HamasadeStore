@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="ckb" dir="rtl" class="dark">
+<html lang="ckb" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>HamaSade Store | ستۆری حەمەسادی</title>
+  <title>HamaSade AltStore | ستۆری حەمەسادی</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Vazirmatn', 'Inter', 'system-ui', 'sans-serif'],
+            sans: ['Vazirmatn', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
           }
         }
       }
@@ -26,1104 +25,1173 @@
       box-sizing: border-box;
     }
     html, body {
-      font-family: 'Vazirmatn', 'Inter', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #ffffff;
+      color: #111111;
+      font-family: 'Vazirmatn', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    /* Inner Scroll Container (Ensures 1-finger vertical scroll works natively in all Android WebViews!) */
+    .alt-scroll-view {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: scroll;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
+      padding-bottom: 96px;
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    /* Native Squircle App Icon */
-    .squircle {
-      border-radius: 22%;
+
+    /* iOS Squircle Icon */
+    .alt-icon {
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
-    /* Press feedback like native Android/iOS */
-    .tap-scale {
-      transition: transform 0.14s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.14s ease;
+
+    /* AltStore Frosted Glass Card */
+    .alt-frosted-card {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     }
-    .tap-scale:active {
-      transform: scale(0.95);
+
+    /* AltStore Category Card */
+    .alt-cat-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      height: 102px;
+      transition: transform 0.15s ease;
     }
-    @keyframes slideUpSheet {
-      from { transform: translateY(100%); opacity: 0.5; }
-      to { transform: translateY(0); opacity: 1; }
+    .alt-cat-card:active, .tap-active:active {
+      transform: scale(0.96);
     }
-    .sheet-animate {
-      animation: slideUpSheet 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    /* Smooth Sheet Transition */
+    @keyframes altSheetIn {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .alt-sheet-enter {
+      animation: altSheetIn 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
     }
   </style>
 </head>
-<body class="bg-[#f4f6fb] text-slate-900 dark:bg-[#090d16] dark:text-slate-100 min-h-screen pb-24 transition-colors duration-200">
+<body>
 
-  <!-- ==================== NATIVE STICKY APP BAR ==================== -->
-  <header class="sticky top-0 z-30 bg-[#f4f6fb]/90 dark:bg-[#090d16]/90 backdrop-blur-xl border-b border-slate-200/70 dark:border-white/[0.06]">
-    <div class="max-w-2xl mx-auto px-4 pt-3 pb-2.5 flex items-center justify-between gap-2">
-      <!-- Brand Profile (Tap 5 times or click lock icon for Admin) -->
-      <div id="brandLogoTrigger" class="flex items-center gap-2.5 cursor-pointer tap-scale">
-        <div class="relative w-10 h-10 squircle bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-[2px] shadow-lg shadow-emerald-500/20">
-          <div class="w-full h-full squircle bg-slate-950 flex items-center justify-center text-white font-black text-xs tracking-tighter">
-            HS
+  <!-- ==================== MAIN INNER SCROLL VIEWPORT ==================== -->
+  <div id="mainScrollViewport" class="alt-scroll-view bg-white">
+    <div class="max-w-lg mx-auto">
+
+      <!-- ===================================================================== -->
+      <!-- TAB 1: BROWSE (گەڕان - Exact Replica of AltStore Screenshot 1)         -->
+      <!-- ===================================================================== -->
+      <section id="tab-browse" class="px-4 pt-5 space-y-6">
+
+        <!-- iOS Large Title + Search Bar -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h1 class="text-[32px] font-black tracking-tight text-slate-950 leading-none">Browse</h1>
+            <span class="text-xs font-extrabold text-[#0d747c] bg-[#dcf2f4] px-3 py-1 rounded-full">حەمەسادی ستۆر</span>
           </div>
-          <span class="absolute -bottom-0.5 -left-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#f4f6fb] dark:border-[#090d16] flex items-center justify-center text-[8px] text-white font-bold">✓</span>
-        </div>
-        <div>
-          <div class="flex items-center gap-1">
-            <h1 class="font-black text-base tracking-tight text-slate-900 dark:text-white leading-none">HAMA SADE</h1>
-            <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 font-extrabold">PRIME</span>
+
+          <div class="relative flex items-center">
+            <svg class="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input
+              id="browseSearchInput"
+              type="text"
+              placeholder="Search / گەڕان بۆ ئەپ و یاری..."
+              class="w-full pr-10 pl-16 py-2.5 rounded-[12px] bg-[#efeff4] text-sm font-medium text-slate-900 placeholder-[#8e8e93] focus:outline-none focus:ring-2 focus:ring-[#0d747c]/30"
+            />
+            <button id="clearSearchBtn" class="hidden absolute left-3 text-xs font-bold text-[#0d747c]">پاککردنەوە</button>
           </div>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">حەمە سادۍ • کۆگای ئەپ و یاری</p>
-        </div>
-      </div>
-
-      <!-- Native Action Pills -->
-      <div class="flex items-center gap-1.5">
-        <button id="openStudioBtn" class="hidden px-3 py-1.5 rounded-full bg-amber-500 text-slate-950 text-xs font-extrabold items-center gap-1 shadow-md tap-scale">
-          <span>+ زیادکردن</span>
-        </button>
-
-        <button id="adminLogoutBtn" class="hidden px-2.5 py-1.5 rounded-full bg-rose-500/15 text-rose-500 text-[11px] font-bold tap-scale">
-          دەرچوون
-        </button>
-
-        <a href="https://t.me/Hamasade" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-full bg-sky-500/15 text-sky-500 text-xs font-extrabold flex items-center gap-1 tap-scale">
-          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-          <span>تێلیگرام</span>
-        </a>
-
-        <button id="themeToggleBtn" class="w-9 h-9 rounded-full bg-slate-200/70 dark:bg-white/[0.07] text-slate-700 dark:text-slate-200 flex items-center justify-center tap-scale" title="گۆڕینی ڕووکار">
-          <svg id="themeIconSun" class="w-4 h-4 hidden text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-          <svg id="themeIconMoon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        </button>
-
-        <button id="adminLockBtn" class="w-9 h-9 rounded-full bg-slate-200/70 dark:bg-white/[0.07] text-slate-400 hover:text-emerald-400 flex items-center justify-center tap-scale" title="بەڕێوەبەر">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Native Search Pill -->
-    <div id="globalSearchWrapper" class="max-w-2xl mx-auto px-4 pb-2.5">
-      <div class="relative flex items-center">
-        <svg class="w-4 h-4 text-slate-400 absolute right-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input
-          id="searchInput"
-          type="text"
-          placeholder="گەڕان لە ناو ٥١ ئەپ و یاری پڕایم (Snapchat, GTA, CapCut)..."
-          class="w-full pr-10 pl-16 py-2.5 rounded-2xl text-xs sm:text-sm bg-slate-200/75 dark:bg-white/[0.06] border border-transparent focus:border-emerald-500/60 focus:bg-white dark:focus:bg-slate-900 focus:outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 transition"
-        />
-        <button id="clearSearchBtn" class="hidden absolute left-3 text-xs text-rose-500 font-bold px-1.5 py-0.5">سڕینەوە</button>
-      </div>
-    </div>
-  </header>
-
-  <!-- ADMIN ACTIVE CONTROL STRIP (Hidden from regular users) -->
-  <div id="adminActiveBar" class="hidden bg-gradient-to-l from-amber-500/20 via-emerald-500/15 to-amber-500/20 border-b border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs py-2.5 px-4">
-    <div class="max-w-2xl mx-auto flex flex-wrap items-center justify-between gap-2">
-      <span class="font-extrabold flex items-center gap-1.5">👑 دۆخی بەڕێوەبەر (HamaSade) چالاکە</span>
-      <div class="flex items-center gap-1.5">
-        <button id="downloadUpdatedHtmlBtn" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-extrabold shadow-sm tap-scale">💾 داگرتنی کۆدی نوێی HTML (بۆ GitHub)</button>
-        <button id="changePassBtn" class="px-2.5 py-1.5 rounded-xl bg-slate-800 text-white font-bold tap-scale">🔑 وشەی نهێنی</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== MAIN NATIVE VIEWPORT ==================== -->
-  <main class="max-w-2xl mx-auto px-4 pt-3 space-y-5">
-
-    <!-- ==================== TAB 1: STORE & APPS ==================== -->
-    <section id="tab-store" class="space-y-5">
-
-      <!-- Social Channels Quick Bar (From hamasade.bio.link) -->
-      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-        <a href="https://www.snapchat.com/add/hama_sadem" target="_blank" rel="noopener" class="tap-scale shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-amber-400/15 border border-amber-400/30 text-amber-600 dark:text-amber-300 text-xs font-extrabold">
-          <span>👻</span><span>سناپچات</span>
-        </a>
-        <a href="https://t.me/Hamasade" target="_blank" rel="noopener" class="tap-scale shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-sky-500/15 border border-sky-500/30 text-sky-600 dark:text-sky-300 text-xs font-extrabold">
-          <span>✈️</span><span>تێلیگرام</span>
-        </a>
-        <a href="https://tiktok.com/@hama_sadem" target="_blank" rel="noopener" class="tap-scale shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-pink-500/15 border border-pink-500/30 text-pink-600 dark:text-pink-300 text-xs font-extrabold">
-          <span>🎵</span><span>تیکتۆک</span>
-        </a>
-        <a href="https://www.instagram.com/hama_sade" target="_blank" rel="noopener" class="tap-scale shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-purple-500/15 border border-purple-500/30 text-purple-600 dark:text-purple-300 text-xs font-extrabold">
-          <span>📸</span><span>ئینستاگرام</span>
-        </a>
-        <a href="https://youtube.com/@Hama_Sadem" target="_blank" rel="noopener" class="tap-scale shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-600 dark:text-red-300 text-xs font-extrabold">
-          <span>▶️</span><span>یوتوب</span>
-        </a>
-        <a href="https://www.facebook.com/share/1c1qba8rVz/" target="_blank" rel="noopener" class="tap-scale shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-blue-500/15 border border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs font-extrabold">
-          <span>📘</span><span>فەیسبووک</span>
-        </a>
-      </div>
-
-      <!-- Featured Spotlight Carousel (Hide when searching) -->
-      <div id="featuredSection" class="space-y-2.5">
-        <div class="flex items-center justify-between px-0.5">
-          <h2 class="text-sm font-black tracking-tight flex items-center gap-1.5">
-            <span>🔥 تایبەت و پڕداواکاری</span>
-          </h2>
-          <span class="text-[11px] text-emerald-500 font-bold">ئەپدەیتی نوێ</span>
         </div>
 
-        <div id="featuredCarousel" class="flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1"></div>
-      </div>
+        <!-- Active Category Filter Banner (Shown when user taps a Category card) -->
+        <div id="activeCatHeader" class="hidden items-center justify-between bg-[#f2f2f7] px-4 py-2.5 rounded-2xl">
+          <div class="flex items-center gap-2">
+            <span id="activeCatTitle" class="font-extrabold text-sm text-slate-900"></span>
+            <span id="activeCatCount" class="text-xs font-bold text-slate-500"></span>
+          </div>
+          <button id="clearCatFilterBtn" class="text-xs font-extrabold text-[#0d747c] px-2.5 py-1 rounded-lg bg-white shadow-sm">پیشاندانی هەمووی ✕</button>
+        </div>
 
-      <!-- Segmented Category Pills -->
-      <div id="categoryFilterBar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 sticky top-[105px] z-20 bg-[#f4f6fb]/95 dark:bg-[#090d16]/95 backdrop-blur py-1.5">
-        <button data-cat="all" class="cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs font-extrabold whitespace-nowrap bg-emerald-500 text-slate-950 shadow-sm">هەمووی (51)</button>
-        <button data-cat="social" class="cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] text-slate-700 dark:text-slate-300">💬 سۆشیاڵ پڕایم</button>
-        <button data-cat="games" class="cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] text-slate-700 dark:text-slate-300">🎮 یارییەکان (11)</button>
-        <button data-cat="media" class="cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] text-slate-700 dark:text-slate-300">🎬 مۆنتاژ و دیزاین</button>
-        <button data-cat="iphone" class="cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] text-slate-700 dark:text-slate-300">🍎 ئایفۆن و کیبۆرد</button>
-        <button data-cat="tools" class="cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs font-bold whitespace-nowrap bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] text-slate-700 dark:text-slate-300">🛠️ ئامراز و فیلم</button>
-      </div>
+        <!-- New & Updated Section (Exact AltStore Pastel Cards) -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 id="browseListHeading" class="text-[19px] font-extrabold tracking-tight text-slate-950">New & Updated • نوێکراوەکان</h2>
+            <button id="toggleShowAllBrowseBtn" class="text-xs font-bold text-[#0d747c]">بینینی هەمووی (51)</button>
+          </div>
 
-      <!-- Native App Store List -->
-      <div id="appsGrid" class="space-y-2.5"></div>
+          <div id="browseAppsList" class="space-y-3"></div>
+        </div>
 
-      <!-- Empty State -->
-      <div id="appsEmptyState" class="hidden rounded-3xl p-8 text-center bg-white dark:bg-[#131b2e] border border-slate-200/70 dark:border-white/[0.06]">
-        <div class="text-2xl mb-2">🔍</div>
-        <p class="text-sm font-bold text-slate-700 dark:text-slate-200">هیچ ئەپ یان یارییەک نەدۆزرایەوە</p>
-        <button id="resetFiltersBtn" class="mt-3 px-4 py-2 rounded-2xl bg-emerald-500 text-slate-950 text-xs font-extrabold tap-scale">پیشاندانی هەموو ئەپەکان</button>
-      </div>
-    </section>
+        <!-- Categories Section (Exact AltStore 2-Column Vibrant Cards with Watermark Icons) -->
+        <div id="categoriesSection" class="space-y-3 pt-1">
+          <h2 class="text-[19px] font-extrabold tracking-tight text-slate-950">Categories • بەشەکان</h2>
 
-    <!-- ==================== TAB 2: GAMES HUB (یارییەکان) ==================== -->
-    <section id="tab-games" class="hidden space-y-3.5">
-      <div class="rounded-3xl p-4 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900 text-white border border-white/10 shadow-lg">
-        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/15">کۆنسۆڵ و مۆبایل</span>
-        <h2 class="text-base sm:text-lg font-black mt-1.5">🎮 یارییە خۆشەکانی ئەندرۆید و ژێرنووسی کوردی</h2>
-        <p class="text-xs text-slate-300 mt-0.5">هەموو یارییەکانی حەمەسادی بە مۆدی کراوە، ژێرنووس و مێنوی کوردی و لینکی ڕاستەوخۆ.</p>
-      </div>
-      <div id="gamesHubGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
-    </section>
+          <div class="grid grid-cols-2 gap-3">
+            <!-- Developer / Tools (Orange) -->
+            <button data-cat="tools" class="cat-card-btn alt-cat-card bg-[#f99506] text-right p-3.5 flex flex-col justify-end">
+              <svg class="w-24 h-24 absolute -left-3 -bottom-3 text-white/35 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="3"/><path d="M7 10l3 2.5L7 15m5 0h4"/></svg>
+              <span class="relative z-10 text-white font-extrabold text-[15px] leading-tight">Developer & Tools</span>
+              <span class="relative z-10 text-white/90 font-bold text-[11px]">ئامراز و سیستەم</span>
+            </button>
 
-    <!-- ==================== TAB 3: NEWS & TUTORIALS (هەواڵ و فێرکاری) ==================== -->
-    <section id="tab-news" class="hidden space-y-3">
-      <div id="newsGrid" class="space-y-3"></div>
-    </section>
+            <!-- Entertainment (Coral Red) -->
+            <button data-cat="entertainment" class="cat-card-btn alt-cat-card bg-[#fb3b2f] text-right p-3.5 flex flex-col justify-end">
+              <svg class="w-24 h-24 absolute -left-2 -bottom-3 text-white/35 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11v8a2 2 0 002 2h12a2 2 0 002-2v-8H4z"/><path d="M4 11l1.5-5.5A2 2 0 017.4 4h9.2a2 2 0 011.9 1.5L20 11M8 4l2 7m4-7l2 7"/></svg>
+              <span class="relative z-10 text-white font-extrabold text-[15px] leading-tight">Entertainment</span>
+              <span class="relative z-10 text-white/90 font-bold text-[11px]">فیلم و میوزیک</span>
+            </button>
 
-    <!-- ==================== TAB 4: SAVED & DOWNLOADS (داگرتنەکانم) ==================== -->
-    <section id="tab-downloads" class="hidden space-y-4">
-      <div class="rounded-3xl p-4 bg-white dark:bg-[#131b2e] border border-slate-200/70 dark:border-white/[0.06] space-y-3">
+            <!-- Games (Purple) -->
+            <button data-cat="games" class="cat-card-btn alt-cat-card bg-[#a450ef] text-right p-3.5 flex flex-col justify-end">
+              <svg class="w-24 h-24 absolute -left-3 -bottom-3 text-white/35 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 11h4M8 9v4m7-1h.01M17 10h.01M6.5 6h11A4.5 4.5 0 0122 10.5c0 2.5-1.2 6.8-2.8 8a2.5 2.5 0 01-3.4-.6L14 16h-4l-1.8 1.9a2.5 2.5 0 01-3.4.6C3.2 17.3 2 13 2 10.5A4.5 4.5 0 016.5 6z"/></svg>
+              <span class="relative z-10 text-white font-extrabold text-[15px] leading-tight">Games</span>
+              <span class="relative z-10 text-white/90 font-bold text-[11px]">یارییەکان (١١)</span>
+            </button>
+
+            <!-- Lifestyle / iOS (Green) -->
+            <button data-cat="iphone" class="cat-card-btn alt-cat-card bg-[#34c759] text-right p-3.5 flex flex-col justify-end">
+              <svg class="w-24 h-24 absolute -left-3 -bottom-3 text-white/35 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-7m0 0l-3-3m3 3l3-3M7 14a5 5 0 01-.9-9.9 6 6 0 0111.8 0A5 5 0 0117 14H7z"/></svg>
+              <span class="relative z-10 text-white font-extrabold text-[15px] leading-tight">Lifestyle & iOS</span>
+              <span class="relative z-10 text-white/90 font-bold text-[11px]">ئایفۆن و کیبۆرد</span>
+            </button>
+
+            <!-- Photo & Video (Crimson Pink) -->
+            <button data-cat="media" class="cat-card-btn alt-cat-card bg-[#fb2b56] text-right p-3.5 flex flex-col justify-end">
+              <svg class="w-24 h-24 absolute -left-3 -bottom-3 text-white/35 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span class="relative z-10 text-white font-extrabold text-[15px] leading-tight">Photo & Video</span>
+              <span class="relative z-10 text-white/90 font-bold text-[11px]">وێنە و مۆنتاژ</span>
+            </button>
+
+            <!-- Social (Vibrant Yellow) -->
+            <button data-cat="social" class="cat-card-btn alt-cat-card bg-[#f9c90c] text-right p-3.5 flex flex-col justify-end">
+              <svg class="w-24 h-24 absolute -left-3 -bottom-3 text-white/45 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              <span class="relative z-10 text-white font-extrabold text-[15px] leading-tight drop-shadow-sm">Social</span>
+              <span class="relative z-10 text-white font-bold text-[11px] drop-shadow-sm">سۆشیاڵ پڕایم</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 2: SOURCES (سەرچاوە - Exact Replica of AltStore Screenshot 2)     -->
+      <!-- ===================================================================== -->
+      <section id="tab-sources" class="hidden">
+        <!-- Radial Glowing Teal Header -->
+        <div class="relative pt-5 pb-12 px-4" style="background: radial-gradient(circle at 50% 25%, #bce8ec 0%, #208791 65%, #166c75 100%);">
+          <!-- Top Back Button -->
+          <div class="mb-3 flex items-center justify-between">
+            <button data-goto-tab="browse" class="goto-tab-btn w-9 h-9 rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-[#0e484e] font-black text-lg tap-active">
+              ›
+            </button>
+            <span class="text-xs font-extrabold text-white/90">سەرچاوەی فەرمی</span>
+          </div>
+
+          <!-- Frosted Glass Source Card -->
+          <div class="alt-frosted-card rounded-[26px] p-4 space-y-3.5">
+            <div class="flex items-center gap-3.5">
+              <div class="w-16 h-16 rounded-full bg-[#1b7a82] flex items-center justify-center shadow-inner shrink-0 border-4 border-white/40">
+                <div class="w-8 h-8 rotate-45 rounded-lg bg-white shadow-sm"></div>
+              </div>
+              <div class="min-w-0">
+                <h2 class="text-xl font-black text-slate-950 leading-tight">HamaSade Store</h2>
+                <p class="text-xs font-medium text-[#3b6e72] leading-snug mt-0.5">
+                  ماڵێک بۆ باشترین بەرنامە و یارییە مۆدکراوەکانی ئەندرۆید بەخۆڕایی.
+                </p>
+              </div>
+            </div>
+
+            <!-- URL Pill Row -->
+            <a href="https://hamasade.bio.link/" target="_blank" rel="noopener" class="flex items-center gap-2.5 bg-[#d5ebed]/80 rounded-xl px-3.5 py-2 text-xs font-semibold text-[#2d666b] tap-active">
+              <span>🔗</span>
+              <span dir="ltr" class="truncate">https://hamasade.bio.link</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- White Curved Body Overlapping Header -->
+        <div class="bg-white rounded-t-[30px] -mt-6 relative z-10 px-4 pt-6 pb-6 space-y-6">
+
+          <!-- Blue Announcement Card (Like "More Trusted Sources!" in Screenshot 2) -->
+          <div class="space-y-2">
+            <div class="rounded-[24px] p-5 bg-gradient-to-br from-[#009dff] to-[#007aff] text-white shadow-md space-y-1.5">
+              <h3 class="text-lg font-black">More Trusted Mods! • مۆدی نوێ</h3>
+              <p class="text-xs text-white/90 font-medium leading-relaxed">
+                بەخێربێن بۆ وەشانی نوێی Snapchat Prime V6 و یارییە کوردییەکانی GTA و Bully لە ستۆری حەمەسادی 🎉
+              </p>
+            </div>
+            <div class="flex justify-end">
+              <button data-goto-tab="news" class="goto-tab-btn text-xs font-bold text-[#0d747c]">View All / هەموو هەواڵەکان</button>
+            </div>
+          </div>
+
+          <!-- Featured Apps Section -->
+          <div class="space-y-3">
+            <h2 class="text-[24px] font-black tracking-tight text-slate-950">Featured Apps</h2>
+            <div id="sourceFeaturedList" class="space-y-3"></div>
+            <div class="flex justify-end pt-1">
+              <button data-goto-tab="myapps" class="goto-tab-btn text-xs font-bold text-[#0d747c]">View All Apps (51)</button>
+            </div>
+          </div>
+
+          <!-- About Section -->
+          <div class="space-y-3 pt-1">
+            <h2 class="text-[24px] font-black tracking-tight text-slate-950">About • دەربارە</h2>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              پەڕەی فەرمی <strong>HAMA SADE / حەمە سادۍ</strong> بۆ دابەزاندنی یاری و بەرنامەکانی ئەندرۆید بەخۆڕایی و بە مۆدکراوی. لە پەیجەکانی ترمان لەگەڵمان بن:
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+              <a href="https://www.snapchat.com/add/hama_sadem" target="_blank" rel="noopener" class="tap-active p-3 rounded-2xl bg-[#fff8d6] text-[#947600] font-extrabold text-xs flex items-center gap-2">
+                <span>👻</span><span>Snapchat</span>
+              </a>
+              <a href="https://t.me/Hamasade" target="_blank" rel="noopener" class="tap-active p-3 rounded-2xl bg-[#e0f3ff] text-[#0066a6] font-extrabold text-xs flex items-center gap-2">
+                <span>✈️</span><span>Telegram</span>
+              </a>
+              <a href="https://tiktok.com/@hama_sadem" target="_blank" rel="noopener" class="tap-active p-3 rounded-2xl bg-[#ffe6f0] text-[#b30047] font-extrabold text-xs flex items-center gap-2">
+                <span>🎵</span><span>TikTok</span>
+              </a>
+              <a href="https://www.instagram.com/hama_sade" target="_blank" rel="noopener" class="tap-active p-3 rounded-2xl bg-[#f3e8ff] text-[#6b21a8] font-extrabold text-xs flex items-center gap-2">
+                <span>📸</span><span>Instagram</span>
+              </a>
+              <a href="https://youtube.com/@Hama_Sadem" target="_blank" rel="noopener" class="tap-active p-3 rounded-2xl bg-[#ffe5e5] text-[#b91c1c] font-extrabold text-xs flex items-center gap-2">
+                <span>▶️</span><span>YouTube</span>
+              </a>
+              <a href="https://www.facebook.com/share/1c1qba8rVz/" target="_blank" rel="noopener" class="tap-active p-3 rounded-2xl bg-[#e6f0ff] text-[#1d4ed8] font-extrabold text-xs flex items-center gap-2">
+                <span>📘</span><span>Facebook</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: NEWS (هەواڵ و فێرکاری)                                         -->
+      <!-- ===================================================================== -->
+      <section id="tab-news" class="hidden px-4 pt-5 space-y-4">
+        <h1 class="text-[32px] font-black tracking-tight text-slate-950 leading-none">News</h1>
+        <p class="text-xs font-semibold text-slate-500">نوێترین هەواڵ، ئەپدەیت و فێرکارییەکانی کەناڵی حەمەسادی</p>
+        <div id="newsCardsContainer" class="space-y-3.5"></div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 4: MY APPS (ئەپەکانم - هەموو ٥١ ئەپ و یاری + داگیراوەکان)         -->
+      <!-- ===================================================================== -->
+      <section id="tab-myapps" class="hidden px-4 pt-5 space-y-4">
         <div class="flex items-center justify-between">
-          <h3 class="font-extrabold text-sm flex items-center gap-1.5"><span>⬇️</span><span>ئەپە داگیراوەکانم</span></h3>
-          <button id="clearCompletedDlBtn" class="text-xs text-rose-500 font-bold tap-scale">پاککردنەوە</button>
-        </div>
-        <div id="downloadsList" class="space-y-2"></div>
-      </div>
-
-      <div class="rounded-3xl p-4 bg-white dark:bg-[#131b2e] border border-slate-200/70 dark:border-white/[0.06] space-y-3">
-        <h3 class="font-extrabold text-sm flex items-center gap-1.5"><span>❤️</span><span>لیستی دڵخوازەکانم</span></h3>
-        <div id="favoritesList" class="space-y-2"></div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ==================== NATIVE BOTTOM SHEET: APP DETAILS ==================== -->
-  <div id="appDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="modal-sheet sheet-animate w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border-t sm:border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
-      <div class="w-10 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto sm:hidden"></div>
-      <div id="appDetailContent"></div>
-    </div>
-  </div>
-
-  <!-- ==================== NATIVE BOTTOM SHEET: NEWS READER ==================== -->
-  <div id="newsDetailModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="modal-sheet sheet-animate w-full sm:max-w-md max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border-t sm:border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
-      <div class="w-10 h-1.5 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto sm:hidden"></div>
-      <div id="newsDetailContent"></div>
-    </div>
-  </div>
-
-  <!-- ==================== ADMIN LOGIN MODAL ==================== -->
-  <div id="adminLoginModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-xs rounded-[28px] bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 p-5 space-y-4 text-center shadow-2xl">
-      <div class="w-12 h-12 squircle bg-emerald-500/15 text-emerald-500 flex items-center justify-center mx-auto font-black text-xl">🔒</div>
-      <div>
-        <h3 class="font-extrabold text-base">چوونەژوورەوەی بەڕێوەبەر</h3>
-        <p class="text-xs text-slate-500 mt-0.5">تایبەت بە خاوەنی ستۆر (HamaSade)</p>
-      </div>
-      <form id="adminLoginForm" class="space-y-3">
-        <input id="adminPassInput" type="password" required placeholder="وشەی نهێنی..." class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center text-sm font-bold focus:outline-none focus:border-emerald-500" />
-        <div class="flex gap-2">
-          <button type="button" id="closeAdminLoginBtn" class="flex-1 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-xs font-bold tap-scale">داخستن</button>
-          <button type="submit" class="flex-1 py-2.5 rounded-2xl bg-emerald-500 text-slate-950 text-xs font-extrabold tap-scale">چوونەژوورەوە</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ==================== CHANGE PASSWORD MODAL ==================== -->
-  <div id="changePassModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="w-full max-w-xs rounded-[28px] bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 p-5 space-y-4 text-center shadow-2xl">
-      <h3 class="font-extrabold text-base">🔑 گۆڕینی وشەی نهێنی بەڕێوەبەر</h3>
-      <form id="changePassForm" class="space-y-3">
-        <input id="newAdminPassInput" type="text" required placeholder="وشەی نهێنی نوێ..." class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-center text-sm font-bold" />
-        <div class="flex gap-2">
-          <button type="button" id="closeChangePassBtn" class="flex-1 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-xs font-bold tap-scale">پاشگەزبوونەوە</button>
-          <button type="submit" class="flex-1 py-2.5 rounded-2xl bg-emerald-500 text-slate-950 text-xs font-extrabold tap-scale">پاشەکەوتکردن</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ==================== ADMIN STUDIO MODAL (تەنها بۆ حەمەسادی) ==================== -->
-  <div id="studioModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="modal-sheet sheet-animate w-full sm:max-w-md max-h-[90vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/10 p-5 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-        <h3 id="studioModalTitle" class="font-extrabold text-base">⚡ پانێڵی کۆنتڕۆڵی حەمەسادی</h3>
-        <button id="closeStudioModalBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold">✕</button>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
-        <button id="studioTabAppBtn" class="py-2 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950">ئەپ / یاری</button>
-        <button id="studioTabNewsBtn" class="py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300">هەواڵ / فێرکاری</button>
-      </div>
-
-      <!-- Add / Edit App Form -->
-      <form id="addAppForm" class="space-y-3 text-xs">
-        <input id="editAppId" type="hidden" value="" />
-        <div>
-          <label class="block font-bold mb-1">ناوی ئەپ یان یاری *</label>
-          <input id="newAppName" required type="text" placeholder="بۆ نموونە: Snapchat Prime V7" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
+          <h1 class="text-[32px] font-black tracking-tight text-slate-950 leading-none">My Apps</h1>
+          <span id="myAppsCountBadge" class="text-xs font-extrabold text-[#0d747c] bg-[#dcf2f4] px-3 py-1 rounded-full">51 ئەپ</span>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold mb-1">بەش *</label>
-            <select id="newAppCat" class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-              <option value="social">💬 سۆشیاڵ پڕایم</option>
-              <option value="games">🎮 یارییەکان</option>
-              <option value="media">🎬 مۆنتاژ و دیزاین</option>
-              <option value="iphone">🍎 ئایفۆن و کیبۆرد</option>
-              <option value="tools">🛠️ ئامراز و فیلم</option>
-            </select>
+        <!-- Sub-filter pills -->
+        <div id="myAppsFilterBar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          <button data-myfilter="all" class="myfilter-btn px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-[#0d747c] text-white whitespace-nowrap">هەموو ئەپەکان (51)</button>
+          <button data-myfilter="downloaded" class="myfilter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#efeff4] text-slate-600 whitespace-nowrap">داگیراوەکانم</button>
+          <button data-myfilter="games" class="myfilter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#efeff4] text-slate-600 whitespace-nowrap">🎮 یارییەکان (11)</button>
+        </div>
+
+        <div id="myAppsListContainer" class="space-y-3"></div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 5: SETTINGS (ڕێکخستن)                                             -->
+      <!-- ===================================================================== -->
+      <section id="tab-settings" class="hidden px-4 pt-5 space-y-5">
+        <h1 class="text-[32px] font-black tracking-tight text-slate-950 leading-none">Settings</h1>
+
+        <div class="rounded-[22px] bg-[#f2f2f7] p-4 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-[#0d747c] text-white flex items-center justify-center font-black text-base">HS</div>
+            <div>
+              <h3 class="font-extrabold text-sm text-slate-900">HamaSade AltStore Edition</h3>
+              <p class="text-xs text-slate-500">وەشانی فەرمی 4.0 • ٥١ ئەپ و یاری پڕایم</p>
+            </div>
           </div>
-          <div>
-            <label class="block font-bold mb-1">ئایکۆن (ئیمۆجی یان ٢ پیت)</label>
-            <input id="newAppIcon" type="text" maxlength="4" placeholder="👻" class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
-          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            هەموو لینکەکانی ناو ئەم ستۆرە ڕاستەوخۆ بەستراونەتەوە بە فایلە فەرمییەکانی حەمەسادی لە MediaFire و Telegram.
+          </p>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-bold mb-1">وەشان *</label>
-            <input id="newAppVer" required type="text" placeholder="Prime V6" class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
-          </div>
-          <div>
-            <label class="block font-bold mb-1">قەبارە (MB) *</label>
-            <input id="newAppSize" required type="number" step="0.1" placeholder="177" class="w-full px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
-          </div>
+        <div class="rounded-[22px] bg-[#f2f2f7] divide-y divide-slate-200/80 overflow-hidden text-xs font-bold">
+          <a href="https://hamasade.bio.link/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 hover:bg-slate-200/50">
+            <span>🌐 ماڵپەڕی سەرەکی (Bio Link)</span>
+            <span class="text-[#0d747c]" dir="ltr">hamasade.bio.link ›</span>
+          </a>
+          <a href="https://t.me/Hamasade" target="_blank" rel="noopener" class="flex items-center justify-between p-4 hover:bg-slate-200/50">
+            <span>✈️ کەناڵی فەرمی تێلیگرام</span>
+            <span class="text-[#0d747c]" dir="ltr">@HamaSade ›</span>
+          </a>
+          <a href="https://www.snapchat.com/add/hama_sadem" target="_blank" rel="noopener" class="flex items-center justify-between p-4 hover:bg-slate-200/50">
+            <span>👻 هەژماری فەرمی سناپچات</span>
+            <span class="text-[#0d747c]" dir="ltr">@hama_sadem ›</span>
+          </a>
+          <button id="clearHistoryBtn" class="w-full flex items-center justify-between p-4 text-rose-600 hover:bg-rose-50">
+            <span>🗑️ پاککردنەوەی تۆماری داگرتنەکان</span>
+            <span>پاککردنەوە</span>
+          </button>
         </div>
+      </section>
 
-        <div>
-          <label class="block font-bold mb-1">تایبەتمەندی مۆد *</label>
-          <input id="newAppModTag" required type="text" placeholder="سەیرکردنی ستۆری و ستریک بە نهێنی + ئیمۆجی ئایفۆن" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
-        </div>
-
-        <div>
-          <label class="block font-bold mb-1">بەستەری داگرتن (MediaFire / Telegram / کلیکی ڕاستەوخۆ) *</label>
-          <input id="newAppUrl" required type="text" placeholder="https://www.mediafire.com/file/..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" dir="ltr" />
-        </div>
-
-        <div>
-          <label class="block font-bold mb-1">زانیاری تەواو لەسەر ئەپەکە *</label>
-          <textarea id="newAppDesc" required rows="2" placeholder="تایبەتمەندییەکانی ئەم مۆدە..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"></textarea>
-        </div>
-
-        <button type="submit" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs tap-scale">
-          پاشەکەوتکردنی ئەپ
-        </button>
-      </form>
-
-      <!-- Add / Edit News Form -->
-      <form id="addNewsForm" class="hidden space-y-3 text-xs">
-        <input id="editNewsId" type="hidden" value="" />
-        <div>
-          <label class="block font-bold mb-1">سەردێڕی هەواڵ یان فێرکاری *</label>
-          <input id="newNewsTitle" required type="text" placeholder="سەردێڕ..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700" />
-        </div>
-        <div>
-          <label class="block font-bold mb-1">ناوەڕۆکی بابەت *</label>
-          <textarea id="newNewsBody" required rows="4" placeholder="وردەکاری بابەتەکە..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"></textarea>
-        </div>
-        <button type="submit" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs tap-scale">
-          پاشەکەوتکردنی هەواڵ
-        </button>
-      </form>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div id="toastBox" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2.5 rounded-2xl bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-950 text-xs font-extrabold shadow-xl">
+  <!-- ===================================================================== -->
+  <!-- APP DETAIL FULL SHEET (Exact Replica of AltStore Screenshot 3)        -->
+  <!-- ===================================================================== -->
+  <div id="appDetailSheet" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-xs">
+    <div id="appDetailScroll" class="alt-scroll-view alt-sheet-enter bg-white" style="padding-bottom: 90px;">
+      <div id="appDetailContent" class="max-w-lg mx-auto"></div>
+    </div>
+  </div>
+
+  <!-- TOAST MESSAGE -->
+  <div id="toastBox" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2.5 rounded-full bg-slate-900/90 text-white text-xs font-extrabold shadow-lg backdrop-blur-md">
     <span id="toastText"></span>
   </div>
 
-  <!-- ==================== NATIVE GLASS BOTTOM NAVIGATION BAR ==================== -->
-  <nav class="fixed bottom-0 inset-x-0 z-40 bg-white/90 dark:bg-[#0c1220]/90 backdrop-blur-xl border-t border-slate-200/80 dark:border-white/[0.07]">
-    <div class="max-w-md mx-auto grid grid-cols-4 px-2 py-1.5">
-      <button data-tab="store" class="nav-tab-btn tap-scale flex flex-col items-center justify-center py-1 rounded-2xl text-emerald-500 font-extrabold">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-        <span class="text-[10px] mt-0.5">ئەپەکان</span>
+  <!-- ===================================================================== -->
+  <!-- ALTSTORE 5-TAB FROSTED BOTTOM BAR (Screenshot 1 & 3 Exact Match)      -->
+  <!-- ===================================================================== -->
+  <nav class="fixed bottom-0 inset-x-0 z-50 bg-white/90 backdrop-blur-xl border-t border-slate-200/80">
+    <div class="max-w-md mx-auto grid grid-cols-5 px-1 pt-1.5 pb-2">
+      <!-- 1. News -->
+      <button data-tab="news" class="alt-nav-btn flex flex-col items-center justify-center py-1 text-[#8e8e93]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+        <span class="text-[10px] font-semibold mt-0.5">News</span>
       </button>
 
-      <button data-tab="games" class="nav-tab-btn tap-scale flex flex-col items-center justify-center py-1 rounded-2xl text-slate-400 font-semibold">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="text-[10px] mt-0.5">یارییەکان</span>
+      <!-- 2. Sources -->
+      <button data-tab="sources" class="alt-nav-btn flex flex-col items-center justify-center py-1 text-[#8e8e93]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 3l8.5 9L12 21 3.5 12 12 3z"/><circle cx="12" cy="12" r="2.5"/></svg>
+        <span class="text-[10px] font-semibold mt-0.5">Sources</span>
       </button>
 
-      <button data-tab="news" class="nav-tab-btn tap-scale flex flex-col items-center justify-center py-1 rounded-2xl text-slate-400 font-semibold">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-        <span class="text-[10px] mt-0.5">هەواڵ و فێرکاری</span>
+      <!-- 3. Browse (Default Active) -->
+      <button data-tab="browse" class="alt-nav-btn flex flex-col items-center justify-center py-1 text-[#0d747c]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.1" viewBox="0 0 24 24"><path d="M6 7h12a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2z"/><path d="M9 7V5a3 3 0 016 0v2"/></svg>
+        <span class="text-[10px] font-extrabold mt-0.5">Browse</span>
       </button>
 
-      <button data-tab="downloads" class="nav-tab-btn tap-scale relative flex flex-col items-center justify-center py-1 rounded-2xl text-slate-400 font-semibold">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-        <span class="text-[10px] mt-0.5">داگرتنەکانم</span>
-        <span id="navDlDot" class="hidden absolute top-1 left-7 w-2 h-2 rounded-full bg-emerald-500"></span>
+      <!-- 4. My Apps -->
+      <button data-tab="myapps" class="alt-nav-btn flex flex-col items-center justify-center py-1 text-[#8e8e93]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="18" cy="6" r="2.5" fill="currentColor"/></svg>
+        <span class="text-[10px] font-semibold mt-0.5">My Apps</span>
+      </button>
+
+      <!-- 5. Settings -->
+      <button data-tab="settings" class="alt-nav-btn flex flex-col items-center justify-center py-1 text-[#8e8e93]">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span class="text-[10px] font-semibold mt-0.5">Settings</span>
       </button>
     </div>
   </nav>
 
-  <!-- ==================== STORE ENGINE & REAL HAMASADE DATA ==================== -->
+  <!-- ===================================================================== -->
+  <!-- APPLICATION LOGIC & ALL 51 HAMASADE APPS/GAMES                        -->
+  <!-- ===================================================================== -->
   <script>
     (function () {
       'use strict';
 
-      const storage = {
-        get(key, fallback) {
-          try {
-            const raw = localStorage.getItem(key);
-            return raw ? JSON.parse(raw) : fallback;
-          } catch (e) {
-            return fallback;
-          }
+      // AltStore Color Palette Presets (Pastel Card BG + Solid Button + Icon Gradient + Subtitle Tint)
+      const PALETTES = {
+        purple: {
+          cardBg: '#efe7fe',
+          btnBg: '#8429ff',
+          subText: '#7c52b5',
+          iconGrad: 'linear-gradient(135deg, #6d1ed4 0%, #4a0e9e 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #e8d0ff 0%, #8c30ff 65%, #6914d6 100%)'
         },
-        set(key, val) {
-          try {
-            localStorage.setItem(key, JSON.stringify(val));
-          } catch (e) {}
+        teal: {
+          cardBg: '#dcf2f4',
+          btnBg: '#0d747c',
+          subText: '#3b7d82',
+          iconGrad: 'linear-gradient(135deg, #278891 0%, #0e5860 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #bce8ec 0%, #208791 65%, #125860 100%)'
+        },
+        pink: {
+          cardBg: '#fde4f1',
+          btnBg: '#f00075',
+          subText: '#b5487d',
+          iconGrad: 'linear-gradient(135deg, #ff4785 0%, #db006b 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #ffd1e8 0%, #f00075 65%, #b80058 100%)'
+        },
+        amber: {
+          cardBg: '#fff4d6',
+          btnBg: '#e59400',
+          subText: '#9e6b08',
+          iconGrad: 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #ffedb3 0%, #f59e0b 65%, #b45309 100%)'
+        },
+        blue: {
+          cardBg: '#e1f0ff',
+          btnBg: '#007aff',
+          subText: '#3b73b5',
+          iconGrad: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #cce6ff 0%, #007aff 65%, #0051a8 100%)'
+        },
+        green: {
+          cardBg: '#dff7e6',
+          btnBg: '#1ca64c',
+          subText: '#2f7d4b',
+          iconGrad: 'linear-gradient(135deg, #34d399 0%, #059669 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #c4f5d3 0%, #1ca64c 65%, #0f6e30 100%)'
+        },
+        crimson: {
+          cardBg: '#ffe3e6',
+          btnBg: '#e61938',
+          subText: '#a83849',
+          iconGrad: 'linear-gradient(135deg, #f43f5e 0%, #be123c 100%)',
+          heroMesh: 'radial-gradient(circle at 50% 25%, #ffccd3 0%, #e61938 65%, #9f1228 100%)'
         }
       };
 
-      /*DATA_START*/
-      const DEFAULT_ADMIN_PASS = "hamasade";
-
-      const DEFAULT_APPS = [
-        // ===== 1. SOCIAL PRIME APPS (سۆشیاڵ پڕایم) =====
+      // Complete 51 Apps & Games from https://hamasade.bio.link/
+      const APPS = [
+        // === SOCIAL PRIME ===
         {
           id: 'snapchat-prime-v6',
           name: 'Snapchat Prime V6',
+          developer: 'HamaSade Prime',
+          date: 'Oct 31, 2026 • 177.6 MB',
           category: 'social',
-          version: 'Prime V6',
-          sizeMB: 177.6,
+          palette: 'amber',
           featured: true,
-          modTag: 'سەیرکردنی ستۆری و ستریک بە نهێنی + ئیمۆجی ئایفۆن + چارەسەری SS06',
-          gradient: 'from-yellow-400 via-amber-500 to-orange-500',
           iconText: '👻',
-          downloadUrl: 'https://www.mediafire.com/file/3m5jvqweeyfwtf9/SnapChat_Prime_V6.apk/file',
-          description: 'نوێترین وەشانی سناپچات پڕایم V6: سەیرکردنی ستۆری و ستریک و نامە بە نهێنی بێ دیاربوون، سکرینشۆت و ڕیکۆرد بێ دیاربوون، ئیمۆجی نوێی ئایفۆن، زمانی کوردی و بایپاسی SS06/SS07.'
+          tagline: 'سەیرکردنی ستۆری و ستریک بە نهێنی و ئیمۆجی ئایفۆن.',
+          url: 'https://www.mediafire.com/file/3m5jvqweeyfwtf9/SnapChat_Prime_V6.apk/file',
+          desc: 'نوێترین وەشانی سناپچات پڕایم V6 تایبەت بە ئەندرۆید: سەیرکردنی ستۆری و ستریک و نامە بە نهێنی بێ دیاربوون، سکرینشۆت و ڕیکۆرد بێ ئاگادارکردنەوە، ئیمۆجی نوێی ئایفۆن، زمانی کوردی و چارەسەری تەواوی کێشەی SS06 و SS07.'
         },
         {
           id: 'snapchat-elite-v4',
           name: 'Snapchat ELITE Plus V4',
+          developer: 'HamaSade VIP',
+          date: 'Oct 29, 2026 • 165 MB',
           category: 'social',
-          version: 'ELITE V4',
-          sizeMB: 165,
+          palette: 'purple',
           featured: true,
-          modTag: 'نەسڕانەوەی نامەکان + تایبەتمەندی VIP + دژە باند',
-          gradient: 'from-amber-500 via-yellow-600 to-slate-900',
           iconText: '👑',
-          downloadUrl: 'https://www.mediafire.com/file/ybfog48is62hvq4/SnapChat_Plus_ELite_V4.apk/file',
-          description: 'وەشانی تایبەتی Snapchat ELITE Plus V4 بە توانای بینینی نامە سڕاوەکان، دۆخی شاراوەی تەواو، و تایبەتمەندییەکانی سناپچات پڵەس.'
-        },
-        {
-          id: 'tiktok-prime-v8',
-          name: 'TikTok Prime',
-          category: 'social',
-          version: 'Prime V8',
-          sizeMB: 135,
-          featured: false,
-          modTag: 'داگرتنی ڤیدیۆ بێ لۆگۆ + بێ ڕیکلام + کوالێتی بەرز',
-          gradient: 'from-slate-900 via-pink-600 to-cyan-500',
-          iconText: '🎵',
-          downloadUrl: 'https://www.mediafire.com/file/zc4edsc2lq072in/TikTok_Prime_V8_.apk/file',
-          description: 'داگرتنی هەموو ڤیدیۆکانی تیکتۆک بەبێ واتەرمارک (لۆگۆ)، لابردنی ڕیکلامەکان و کردنەوەی هەموو ناوچەکان.'
+          tagline: 'هێشتنەوەی نامە سڕاوەکان و تایبەتمەندییەکانی سناپچات پڵەس.',
+          url: 'https://www.mediafire.com/file/ybfog48is62hvq4/SnapChat_Plus_ELite_V4.apk/file',
+          desc: 'وەشانی تایبەتی Snapchat ELITE Plus V4 کە هەموو نامەکان دەپارێزێت تەنانەت ئەگەر لای بەرامبەر بسڕێتەوە، لەگەڵ کردنەوەی تایبەتمەندییەکانی VIP و دۆخی تارمایی.'
         },
         {
           id: 'instagram-prime-v6',
           name: 'iNstagram Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 28, 2026 • 88 MB',
           category: 'social',
-          version: 'Prime V6',
-          sizeMB: 88,
-          featured: false,
-          modTag: 'داگرتنی ڕیڵس و ستۆری + بینینی نامە بە نهێنی + فۆنتی ئایفۆن',
-          gradient: 'from-pink-500 via-rose-500 to-purple-700',
+          palette: 'pink',
+          featured: true,
           iconText: '📸',
-          downloadUrl: 'https://www.mediafire.com/file/9xnyzd4y5zthgsr/iNstaGram_Prime_V6.apk/file',
-          description: 'داگرتنی ستۆری و ڕیڵس و پۆستەکان بە یەک کلیک، شاردنەوەی بینینی نامە و ستۆری، و کوالێتی بەرزی ستۆری.'
+          tagline: 'داگرتنی ڕیڵس و ستۆری بە یەک کلیک و دۆخی شاراوە.',
+          url: 'https://www.mediafire.com/file/9xnyzd4y5zthgsr/iNstaGram_Prime_V6.apk/file',
+          desc: 'ئینستاگرام پڕایم V6 بۆ داگرتنی هەموو ڤیدیۆ و ڕیڵس و ستۆرییەکان، سەیرکردنی نامە و ستۆری بەبێ دەرکەوتنی Seen، و فۆنت و ئیمۆجی ئایفۆن.'
+        },
+        {
+          id: 'tiktok-prime-v8',
+          name: 'TikTok Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 27, 2026 • 135 MB',
+          category: 'social',
+          palette: 'crimson',
+          featured: true,
+          iconText: '🎵',
+          tagline: 'داگرتنی هەموو ڤیدیۆکان بەبێ لۆگۆ (Watermark).',
+          url: 'https://www.mediafire.com/file/zc4edsc2lq072in/TikTok_Prime_V8_.apk/file',
+          desc: 'تیکتۆک پڕایم V8 بە توانای داگرتنی ڤیدیۆ بە کوالێتی بنەڕەتی و بێ لۆگۆ، لابردنی هەموو ڕیکلامەکان و کردنەوەی فلتەرەکان.'
         },
         {
           id: 'telegram-prime-v6',
           name: 'Telegram Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 26, 2026 • 74 MB',
           category: 'social',
-          version: 'Prime V6',
-          sizeMB: 74,
+          palette: 'blue',
           featured: false,
-          modTag: 'تایبەتمەندی پڕیمیۆم کراوە + خێرایی بەرزی داگرتن + دۆخی تارمایی',
-          gradient: 'from-sky-400 to-blue-700',
           iconText: '✈️',
-          downloadUrl: 'https://www.mediafire.com/file/wlb8hji7wcdmilt/Telegram_Prime_V6_.apk/file',
-          description: 'تێلیگرام پڕایم بە تەواوی تایبەتمەندییەکانی پڕیمیۆم، وەرگێڕانی خۆکار، و خوێندنەوەی نامە سڕاوەکان.'
+          tagline: 'تایبەتمەندییەکانی Telegram Premium بەخۆڕایی.',
+          url: 'https://www.mediafire.com/file/wlb8hji7wcdmilt/Telegram_Prime_V6_.apk/file',
+          desc: 'تێلیگرام پڕایم V6 بە کراوەیی تایبەتمەندییەکانی پڕیمیۆم، خێرایی بەرزی داگرتن، و بینینی نامە سڕاوەکان.'
         },
         {
           id: 'messenger-prime-v1',
           name: 'Messenger Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 15, 2026 • 98.8 MB',
           category: 'social',
-          version: 'Prime V1',
-          sizeMB: 98.8,
+          palette: 'purple',
           featured: false,
-          modTag: 'هێشتنەوەی نامە سڕاوەکان + بینینی ستۆری و نامە بە نهێنی',
-          gradient: 'from-blue-500 via-indigo-600 to-purple-600',
           iconText: '💬',
-          downloadUrl: 'https://www.mediafire.com/file/gqu3gokvsyxnfrb/Messenger_Prime_V1.apk/file',
-          description: 'بینینی نامە سڕاوەکان، سەیرکردنی ستۆری و نامە بە نهێنی، ناردنی وێنە و ڤیدیۆ بە کوالێتی بنەڕەتی و شاردنەوەی نیشاندەری نووسین.'
+          tagline: 'هێشتنەوەی نامە سڕاوەکان و بینینی ستۆری بە نهێنی.',
+          url: 'https://www.mediafire.com/file/gqu3gokvsyxnfrb/Messenger_Prime_V1.apk/file',
+          desc: 'مەسنجەر پڕایم V1 بە توانای پاراستنی نامە سڕاوەکان، بینینی نامە و ستۆری بە نهێنی، و ناردنی وێنە و ڤیدیۆ بە کوالێتی تەواو.'
         },
         {
           id: 'facebook-prime-v1',
           name: 'FaceBook Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 20, 2026 • 112 MB',
           category: 'social',
-          version: 'Prime V1',
-          sizeMB: 112,
+          palette: 'blue',
           featured: false,
-          modTag: 'داگرتنی ڤیدیۆ و ستۆری + بێ ڕیکلامی ناو فەیسبووک',
-          gradient: 'from-blue-600 to-blue-900',
           iconText: '📘',
-          downloadUrl: 'https://www.mediafire.com/file/fh54spmoddfd7cv/FaceBook_Prime_V1_.apk/file',
-          description: 'وەشانی تایبەتی فەیسبووک پڕایم بەبێ ڕیکلام و بە توانای داگرتنی ڤیدیۆ و ڕیڵس و ستۆرییەکان.'
+          tagline: 'داگرتنی ڤیدیۆ و ڕیڵسی فەیسبووک بێ ڕیکلام.',
+          url: 'https://www.mediafire.com/file/fh54spmoddfd7cv/FaceBook_Prime_V1_.apk/file',
+          desc: 'فەیسبووک پڕایم V1 بەبێ ڕیکلام و بە توانای داگرتنی ڕاستەوخۆی ڤیدیۆ و ستۆرییەکان.'
         },
         {
           id: 'x-prime-v1',
-          name: 'X Prime (Twitter)',
+          name: 'X Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 18, 2026 • 82 MB',
           category: 'social',
-          version: 'Prime V1',
-          sizeMB: 82,
+          palette: 'teal',
           featured: false,
-          modTag: 'داگرتنی ڤیدیۆ و GIF + بێ ڕیکلام + نیشانەی پڕۆ',
-          gradient: 'from-slate-700 to-black',
           iconText: '𝕏',
-          downloadUrl: 'https://www.mediafire.com/file/8jvdkpquftr2lv/_X_Prime_V1__.apk/file',
-          description: 'ئێکس (تویتەر) پڕایم بە توانای داگرتنی هەموو ڤیدیۆکان و لابردنی ڕیکلامە بێزارکەرەکان.'
+          tagline: 'داگرتنی ڤیدیۆ و GIF لە تویتەر (X) بێ ڕیکلام.',
+          url: 'https://www.mediafire.com/file/8jvdkpquftr2lv/_X_Prime_V1__.apk/file',
+          desc: 'وەشانی مۆدکراوی X Prime بە لابردنی هەموو ڕیکلامەکان و داگرتنی ڤیدیۆ بە یەک کرتە.'
         },
         {
           id: 'sendit-prime-v3',
           name: 'Sendit Prime',
+          developer: 'HamaSade Social',
+          date: 'Oct 14, 2026 • 54 MB',
           category: 'social',
-          version: 'Prime V3',
-          sizeMB: 54,
+          palette: 'pink',
           featured: false,
-          modTag: 'ئاشکراکردنی ناوی نێردەری پرسیارە نهێنییەکان (VIP)',
-          gradient: 'from-orange-500 to-rose-600',
           iconText: '💌',
-          downloadUrl: 'https://www.mediafire.com/file/l0avy9aq4memz90/SendiT_Prime_V3_.apk/file',
-          description: 'کردنەوەی هەموو ئاماژە و تایبەتمەندییەکانی Diamond بۆ زانینی ئەو کەسانەی لە سناپچات پرسیارت بۆ دەنێرن.'
+          tagline: 'ئاشکراکردنی نێردەری پرسیارە نهێنییەکانی سناپچات.',
+          url: 'https://www.mediafire.com/file/l0avy9aq4memz90/SendiT_Prime_V3_.apk/file',
+          desc: 'کردنەوەی تایبەتمەندییەکانی VIP لە بەرنامەی Sendit بۆ بینینی ئاماژە و زانیاری لەسەر نێردەری نامەکان.'
         },
 
-        // ===== 2. MEDIA & DESIGN PRIME (مۆنتاژ و دیزاین) =====
+        // === PHOTO & VIDEO (مۆنتاژ و دیزاین) ===
         {
           id: 'capcut-prime-v13',
           name: 'CapCut Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 30, 2026 • 145 MB',
           category: 'media',
-          version: 'Prime V13',
-          sizeMB: 145,
+          palette: 'teal',
           featured: true,
-          modTag: 'تەواوی فلتەر و تێمپلەیتە پڕۆکان کراوەن + بێ واتەرمارک',
-          gradient: 'from-slate-800 via-indigo-950 to-black',
           iconText: '🎬',
-          downloadUrl: 'https://www.mediafire.com/file/vxsfhmtlvxz0lao/CapCut_Prime_V13_.apk/file',
-          description: 'باشترین بەرنامەی مۆنتاژ بە کراوەیی هەموو ئیفێکتەکانی Pro و فۆنتی کوردی و هەناردەکردنی کوالێتی 4K.'
+          tagline: 'تەواوی فلتەر و تێمپلەیتە پڕۆکان کراوەن بێ واتەرمارک.',
+          url: 'https://www.mediafire.com/file/vxsfhmtlvxz0lao/CapCut_Prime_V13_.apk/file',
+          desc: 'کاپ کەت پڕایم V13 بە کراوەیی هەموو تایبەتمەندییەکانی Pro، پشتگیری زمانی کوردی و هەناردەکردنی ڤیدیۆ بە کوالێتی 4K 60fps.'
         },
         {
           id: 'alight-motion-prime-v4',
           name: 'Alight Motion Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 25, 2026 • 96 MB',
           category: 'media',
-          version: 'Prime V4',
-          sizeMB: 96,
+          palette: 'green',
           featured: false,
-          modTag: 'بێ واتەرمارک + XML و پڕۆژەکان + هەموو ئیفێکتەکان',
-          gradient: 'from-emerald-500 to-teal-900',
           iconText: 'AM',
-          downloadUrl: 'https://www.mediafire.com/file/7xmpgawdcjoqhvf/AlighTMotion_Prime_V4.apk/file',
-          description: 'ئەلایت مۆشنی پڕایم بۆ دروستکردنی مۆشن گرافیک و ئیدیتی پڕۆفیشناڵ بەبێ لۆگۆ.'
+          tagline: 'مۆشن گرافیکی پیشەیی بەبێ لۆگۆ و پشتگیری XML.',
+          url: 'https://www.mediafire.com/file/7xmpgawdcjoqhvf/AlighTMotion_Prime_V4.apk/file',
+          desc: 'ئەلایت مۆشنی پڕایم V4 بە کراوەیی هەموو ئیفێکتەکانی VIP و لابردنی واتەرمارک.'
         },
         {
           id: 'tracket-motion-prime',
           name: 'Tracket Motion Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 22, 2026 • 68 MB',
           category: 'media',
-          version: 'Prime V1',
-          sizeMB: 68,
+          palette: 'purple',
           featured: false,
-          modTag: 'تراککردن و جووڵەی پڕۆفیشناڵی ڤیدیۆ',
-          gradient: 'from-violet-600 to-indigo-900',
           iconText: 'TM',
-          downloadUrl: 'https://www.mediafire.com/file/kmjsiafa7gu2ok4/Tracket_Motion_V1.apk/file',
-          description: 'بەرنامەی تایبەت بە جووڵەپێکردن و تراککردنی ڤیدیۆ بە شێوەی پڕۆ.'
+          tagline: 'تراککردن و جووڵەی سینەمایی بۆ ڤیدیۆ.',
+          url: 'https://www.mediafire.com/file/kmjsiafa7gu2ok4/Tracket_Motion_V1.apk/file',
+          desc: 'بەرنامەی Tracket Motion Prime بۆ دروستکردنی جووڵە و مۆنتاژی خێرا.'
         },
         {
           id: 'remini-prime-v8',
           name: 'Remini Prime',
+          developer: 'HamaSade AI',
+          date: 'Oct 24, 2026 • 72 MB',
           category: 'media',
-          version: 'Prime V8',
-          sizeMB: 72,
+          palette: 'crimson',
           featured: false,
-          modTag: 'سافکردن و بەرزکردنەوەی کوالێتی وێنە بە AI بێ ڕیکلام',
-          gradient: 'from-rose-600 to-red-900',
           iconText: '✨',
-          downloadUrl: 'https://www.mediafire.com/file/kpv0dax9b9072ql/Remini_Prime_V8_.apk/file',
-          description: 'چاککردنەوە و ڕوونکردنەوەی وێنەی کۆن و تەڵخ بە ژیری دەستکرد بەبێ سنوور و بێ ڕیکلام.'
+          tagline: 'سافکردن و بەرزکردنەوەی کوالێتی وێنە بە ژیری دەستکرد.',
+          url: 'https://www.mediafire.com/file/kpv0dax9b9072ql/Remini_Prime_V8_.apk/file',
+          desc: 'ڕێمینی پڕایم V8 بۆ ڕوونکردنەوەی وێنەی تەڵخ و کۆن بەبێ ڕیکلام و بەبێ سنووری ڕۆژانە.'
         },
         {
           id: 'photoroom-prime-v3',
           name: 'PhotoRoom Prime',
+          developer: 'HamaSade Design',
+          date: 'Oct 21, 2026 • 64 MB',
           category: 'media',
-          version: 'Prime V3',
-          sizeMB: 64,
+          palette: 'purple',
           featured: false,
-          modTag: 'بڕینی پاشبنەمای وێنە بە وردی + هەناردەی HD بێ لۆگۆ',
-          gradient: 'from-indigo-500 to-purple-800',
           iconText: 'PR',
-          downloadUrl: 'https://www.mediafire.com/file/etl0isrwkncpfqi/PhotoRoom_Prime_V3.apk/file',
-          description: 'لابردنی باکگراوندی وێنە بە یەک چرکە و دانانی دیزاینی ستۆدیۆیی بە تایبەتمەندی Pro.'
+          tagline: 'لابردنی پاشبنەمای وێنە بە کوالێتی ستۆدیۆیی HD.',
+          url: 'https://www.mediafire.com/file/etl0isrwkncpfqi/PhotoRoom_Prime_V3.apk/file',
+          desc: 'فۆتۆڕووم پڕایم V3 بۆ بڕینی پاشبنەمای وێنە بە وردی و هەناردەکردنی بێ لۆگۆ.'
         },
         {
           id: 'picsart-prime-v3',
           name: 'Picsart Pro Prime',
+          developer: 'HamaSade Design',
+          date: 'Oct 20, 2026 • 85 MB',
           category: 'media',
-          version: 'Prime V3',
-          sizeMB: 85,
+          palette: 'pink',
           featured: false,
-          modTag: 'تەواوی ئامرازەکانی Gold کراوەن + فۆنت و ستیکەر',
-          gradient: 'from-fuchsia-500 to-pink-700',
           iconText: 'PA',
-          downloadUrl: 'https://www.mediafire.com/file/tmal5ojom9cn6sw/PicsArt_Prime_V3.apk/file',
-          description: 'پیکس ئارتی گۆڵد بە کراوەیی هەموو فلتەر و ئامرازەکانی دەستکاریکردنی وێنە.'
+          tagline: 'هەموو ئامراز و فلتەرەکانی Picsart Gold کراوەن.',
+          url: 'https://www.mediafire.com/file/tmal5ojom9cn6sw/PicsArt_Prime_V3.apk/file',
+          desc: 'پیکس ئارت پڕایم V3 بە تەواوی تایبەتمەندییەکانی Gold و فۆنتی کوردی.'
         },
         {
           id: 'lightroom-prime-v1',
           name: 'LightRoom Prime',
+          developer: 'HamaSade Design',
+          date: 'Oct 19, 2026 • 110 MB',
           category: 'media',
-          version: 'Prime V1',
-          sizeMB: 110,
+          palette: 'blue',
           featured: false,
-          modTag: 'پڕیسێت و فلتەری ڕەنگکردنی پیشەیی + ماسکینگ کراوە',
-          gradient: 'from-sky-600 to-slate-900',
           iconText: 'Lr',
-          downloadUrl: 'https://www.mediafire.com/file/9g97c6sa8vzup1c/LightRoom_Prime_V1_%25281%2529.apk/file',
-          description: 'ئەدۆبی لایتڕوومی پڕایم بۆ ڕێکخستنی ڕەنگ و ڕووناکی وێنەکان بە کوالێتی RAW.'
+          tagline: 'ڕەنگکردنی پیشەیی وێنە و کردنەوەی بەشی Masking.',
+          url: 'https://www.mediafire.com/file/9g97c6sa8vzup1c/LightRoom_Prime_V1_%25281%2529.apk/file',
+          desc: 'لایتڕووم پڕایم V1 بە کراوەیی هەموو ئامرازەکانی ڕێکخستنی ڕەنگ و فلتەرەکان.'
         },
         {
           id: 'inshot-prime-v7',
           name: 'iNshot Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 18, 2026 • 69 MB',
           category: 'media',
-          version: 'Prime V7',
-          sizeMB: 69,
+          palette: 'crimson',
           featured: false,
-          modTag: 'هەموو پەکەیج و ئیفێکتەکان کراوەن + بێ لۆگۆ',
-          gradient: 'from-rose-500 to-orange-600',
           iconText: 'IN',
-          downloadUrl: 'https://www.mediafire.com/file/tl2hz5dn39abj0q/iNshot_Prime_V7.apk/file',
-          description: 'ئینشۆت پڕایم بۆ مۆنتاژی خێرای ڤیدیۆ و وێنە بەبێ ڕیکلام و بێ واتەرمارک.'
+          tagline: 'مۆنتاژی خێرای ڤیدیۆ و وێنە بێ واتەرمارک.',
+          url: 'https://www.mediafire.com/file/tl2hz5dn39abj0q/iNshot_Prime_V7.apk/file',
+          desc: 'ئینشۆت پڕایم V7 بە کراوەیی هەموو ستیکەر و ئیفێکت و ترانزیشنەکان.'
         },
         {
           id: 'kinemaster-prime-v5',
           name: 'KineMaster Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 17, 2026 • 108 MB',
           category: 'media',
-          version: 'Prime V5',
-          sizeMB: 108,
+          palette: 'amber',
           featured: false,
-          modTag: 'فرۆشگای ئەسێت کراوە + بێ واتەرمارک + فۆنتی کوردی',
-          gradient: 'from-red-500 to-rose-800',
           iconText: 'KM',
-          downloadUrl: 'https://www.mediafire.com/file/9jnk0qy305aokhz/KineMaster_Prime_V5.apk/file',
-          description: 'کاین ماستەر پڕایم بۆ مۆنتاژکردنی ڤیدیۆی فرە-چین بە کوالێتی بەرز.'
+          tagline: 'مۆنتاژی فرە-چین بێ لۆگۆ و فرۆشگای ئەسێتی کراوە.',
+          url: 'https://www.mediafire.com/file/9jnk0qy305aokhz/KineMaster_Prime_V5.apk/file',
+          desc: 'کاین ماستەر پڕایم V5 بۆ مۆنتاژکردنی ڤیدیۆ بە فۆنتی کوردی و کوالێتی 4K.'
         },
         {
           id: 'videoleap-prime-v2',
           name: 'Video Leap Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 16, 2026 • 92 MB',
           category: 'media',
-          version: 'Prime V2',
-          sizeMB: 92,
+          palette: 'purple',
           featured: false,
-          modTag: 'ئیفێکتی سینەمایی و AI کراوە',
-          gradient: 'from-purple-600 to-rose-700',
           iconText: 'VL',
-          downloadUrl: 'https://www.mediafire.com/file/du7dbcnrrzwk2gi/VideoLeap_Prime_V2.apk/file',
-          description: 'ڤیدیۆ لیپ پڕایم بۆ دروستکردنی ڤیدیۆی داهێنەرانە و تێکەڵکردنی گرتەکان.'
+          tagline: 'ئیفێکتی سینەمایی و ئامرازەکانی AI کراوەن.',
+          url: 'https://www.mediafire.com/file/du7dbcnrrzwk2gi/VideoLeap_Prime_V2.apk/file',
+          desc: 'ڤیدیۆ لیپ پڕایم V2 بۆ دروستکردنی ڤیدیۆی سەرنجڕاکێش و تێکەڵکردنی گرتەکان.'
         },
         {
           id: 'cutecut-prime-v2',
           name: 'Cute Cut Pro Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 15, 2026 • 52 MB',
           category: 'media',
-          version: 'Prime V2',
-          sizeMB: 52,
+          palette: 'teal',
           featured: false,
-          modTag: 'وەشانی پڕۆ بێ واتەرمارک + ترانزیشنی تایبەت',
-          gradient: 'from-teal-500 to-cyan-800',
           iconText: 'CC',
-          downloadUrl: 'https://www.mediafire.com/file/ly4tjankclorh7b/CuteCUT_Prime_V2.apk/file',
-          description: 'کیوت کەتی پڕۆ بۆ دروستکردنی تایپۆگرافی و ئەنیمەیشنی کورت.'
+          tagline: 'وەشانی Pro بەبێ واتەرمارک بۆ تایپۆگرافی.',
+          url: 'https://www.mediafire.com/file/ly4tjankclorh7b/CuteCUT_Prime_V2.apk/file',
+          desc: 'کیوت کەتی پڕۆ V2 بۆ دروستکردنی ڤیدیۆی تایپۆگرافی و وێنەکێشان لەسەر ڤیدیۆ.'
         },
         {
           id: 'polarr-prime-v1',
           name: 'Polerr Prime',
+          developer: 'HamaSade Design',
+          date: 'Oct 14, 2026 • 66 MB',
           category: 'media',
-          version: 'Prime V1',
-          sizeMB: 66,
+          palette: 'blue',
           featured: false,
-          modTag: 'کردنەوەی هەموو کۆد و فلتەرەکانی QR',
-          gradient: 'from-cyan-500 to-blue-800',
           iconText: 'PL',
-          downloadUrl: 'https://www.mediafire.com/file/fa8s275g1289lf3/Polar_Prime_V1.apk/file',
-          description: 'پۆلار پڕایم بۆ بەکارهێنانی هەزاران فلتەری ئامادەکراوی وێنە.'
+          tagline: 'کردنەوەی هەموو فلتەر و کۆدەکانی Polarr QR.',
+          url: 'https://www.mediafire.com/file/fa8s275g1289lf3/Polar_Prime_V1.apk/file',
+          desc: 'پۆلار پڕایم V1 بە کراوەیی هەموو فلتەرەکان و ئامرازەکانی دەستکاریکردنی ڕووخسار.'
         },
         {
           id: 'lovi-prime-v1',
           name: 'Lovi Prime',
+          developer: 'HamaSade Media',
+          date: 'Oct 13, 2026 • 58 MB',
           category: 'media',
-          version: 'Prime V1',
-          sizeMB: 58,
+          palette: 'pink',
           featured: false,
-          modTag: 'تێمپلەیتی ستۆری و ڤیدیۆی مۆزیک کراوە',
-          gradient: 'from-pink-500 to-amber-500',
           iconText: 'LV',
-          downloadUrl: 'https://www.mediafire.com/file/ctbik2mxhmgp2ut/Lovi_Prime_V1.apk/file',
-          description: 'دروستکردنی ڤیدیۆ و ستۆری سەرنجڕاکێش بە ئامرازەکانی Lovi Prime.'
+          tagline: 'تێمپلەیتی ستۆری و ڤیدیۆی میوزیکاڵی پڕۆ.',
+          url: 'https://www.mediafire.com/file/ctbik2mxhmgp2ut/Lovi_Prime_V1.apk/file',
+          desc: 'لۆڤی پڕایم V1 بۆ دروستکردنی ستۆری و ڤیدیۆی جووڵاو بە کوالێتی بەرز.'
         },
 
-        // ===== 3. IPHONE STYLE & KURDISH FONTS (ئایفۆن و کیبۆرد) =====
+        // === LIFESTYLE & IPHONE (ئایفۆن و کیبۆرد) ===
         {
           id: 'hs-font-emoji-iphone',
           name: 'HS FonT Emoji iPhone',
+          developer: 'HamaSade iOS',
+          date: 'Oct 28, 2026 • 42 MB',
           category: 'iphone',
-          version: 'Prime V3',
-          sizeMB: 42,
+          palette: 'green',
           featured: false,
-          modTag: 'گۆڕینی ئیمۆجی و فۆنتی ئەندرۆید بۆ ئایفۆن (iOS)',
-          gradient: 'from-amber-400 to-orange-600',
           iconText: '🍎',
-          downloadUrl: 'https://www.mediafire.com/file/7tkvur2k5e0wbqy/HS_Font_Prime_V3.apk/file',
-          description: 'بەرنامەی تایبەتی حەمەسادی بۆ گۆڕینی فۆنتی مۆبایل و دانانی ئیمۆجی ئایفۆن لەسەر ئەندرۆید.'
+          tagline: 'گۆڕینی فۆنت و ئیمۆجی مۆبایل بۆ ئایفۆن (iOS).',
+          url: 'https://www.mediafire.com/file/7tkvur2k5e0wbqy/HS_Font_Prime_V3.apk/file',
+          desc: 'بەرنامەی تایبەتی حەمەسادی بۆ گۆڕینی فۆنتی کوردی و ئیمۆجی ئەندرۆید بۆ شێوازی ئایفۆن.'
         },
         {
           id: 'hs-keyboard-emoji-iphone',
           name: 'HS KeyBord Emoji iPhone',
+          developer: 'HamaSade iOS',
+          date: 'Oct 27, 2026 • 38 MB',
           category: 'iphone',
-          version: 'Prime V1',
-          sizeMB: 38,
+          palette: 'teal',
           featured: false,
-          modTag: 'کیبۆردی شێوە ئایفۆن + ئیمۆجی iOS + زمانی کوردی',
-          gradient: 'from-slate-600 to-slate-900',
           iconText: '⌨️',
-          downloadUrl: 'https://www.mediafire.com/file/wbwlx6x9cta51rh/HS_KeyBoard_Prime_V1.apk/file',
-          description: 'کیبۆردی تایبەتی حەمەسادی بە دیزاینی ئایفۆن و پشتگیری تەواوی پیت و ئیمۆجییەکان.'
+          tagline: 'کیبۆردی شێوە ئایفۆن بە ئیمۆجی iOS و زمانی کوردی.',
+          url: 'https://www.mediafire.com/file/wbwlx6x9cta51rh/HS_KeyBoard_Prime_V1.apk/file',
+          desc: 'کیبۆردی تایبەتی حەمەسادی بە دیزاینی ئایفۆن و هەموو پیتە کوردییەکان و ئیمۆجی نوێ.'
         },
         {
           id: 'emoji-ios-16-ttf',
-          name: 'Emoji iOS 16 File',
+          name: 'Emoji iOS 16',
+          developer: 'HamaSade iOS',
+          date: 'Oct 22, 2026 • 28 MB',
           category: 'iphone',
-          version: 'iOS 16',
-          sizeMB: 28,
+          palette: 'amber',
           featured: false,
-          modTag: 'فایلی ڕاستەوخۆی فۆنتی ئیمۆجی ئایفۆن (.ttf)',
-          gradient: 'from-yellow-500 to-amber-700',
           iconText: '😎',
-          downloadUrl: 'https://www.mediafire.com/file/q4hf696pzef5e7g/iOS16_Hamasade.ttf/file',
-          description: 'فایلی فۆنتی ئیمۆجی ئایفۆن بۆ بەکارهێنان لەناو بەرنامەکانی مۆنتاژ و سیستەمی مۆبایل.'
+          tagline: 'فایلی ڕاستەوخۆی ئیمۆجی ئایفۆن (iOS16_Hamasade.ttf).',
+          url: 'https://www.mediafire.com/file/q4hf696pzef5e7g/iOS16_Hamasade.ttf/file',
+          desc: 'فایلی فۆنتی ئیمۆجی ئایفۆن بۆ بەکارهێنان لەناو بەرنامەکانی مۆنتاژ و گۆڕینی فۆنتی سیستەم.'
         },
         {
           id: 'gallery-iphone-prime',
           name: 'Gallery iPhone Prime',
+          developer: 'HamaSade iOS',
+          date: 'Oct 19, 2026 • 32 MB',
           category: 'iphone',
-          version: 'Prime V1',
-          sizeMB: 32,
+          palette: 'pink',
           featured: false,
-          modTag: 'گەلەری وێنەی شێوە ئایفۆن (iOS Photos) بێ ڕیکلام',
-          gradient: 'from-pink-500 via-amber-400 to-sky-500',
           iconText: '🖼️',
-          downloadUrl: 'https://www.mediafire.com/file/4hkch4ijxngcxa2/gallery_Prime_V1.apk/file',
-          description: 'گەلەرییەکی خێرا و جوان بە هەمان دیزاینی ئایفۆن بۆ ئەندرۆید.'
+          tagline: 'گەلەری وێنە و ڤیدیۆ بە دیزاینی ئایفۆن (iOS Photos).',
+          url: 'https://www.mediafire.com/file/4hkch4ijxngcxa2/gallery_Prime_V1.apk/file',
+          desc: 'گەلەری شێوە ئایفۆن بۆ ئەندرۆید بەبێ ڕیکلام و بە خێرایی زۆر بەرز.'
         },
         {
           id: 'files-iphone-prime',
           name: 'Files iPhone Prime',
+          developer: 'HamaSade iOS',
+          date: 'Oct 18, 2026 • 29 MB',
           category: 'iphone',
-          version: 'Prime V1',
-          sizeMB: 29,
+          palette: 'blue',
           featured: false,
-          modTag: 'بەڕێوەبەری فایلی شێوە ئایفۆن (iOS Files)',
-          gradient: 'from-sky-500 to-blue-700',
           iconText: '📁',
-          downloadUrl: 'https://www.mediafire.com/file/jdmhlvdfgu9zgfw/Files_Prime_V1.apk/file',
-          description: 'بەرنامەی فایلەکانی ئایفۆن بۆ ڕێکخستنی فۆڵدەرەکانی ئەندرۆید.'
+          tagline: 'بەڕێوەبەری فایلەکانی مۆبایل بە دیزاینی iOS Files.',
+          url: 'https://www.mediafire.com/file/jdmhlvdfgu9zgfw/Files_Prime_V1.apk/file',
+          desc: 'بەرنامەی فایلەکانی شێوە ئایفۆن بۆ ڕێکخستنی تەواوی فۆڵدەرەکانی ناو مۆبایلەکەت.'
         },
         {
           id: 'calendar-iphone-prime',
           name: 'Calendar iPhone Prime',
+          developer: 'HamaSade iOS',
+          date: 'Oct 17, 2026 • 24 MB',
           category: 'iphone',
-          version: 'Prime V1',
-          sizeMB: 24,
+          palette: 'crimson',
           featured: false,
-          modTag: 'ڕۆژژمێری شێوە ئایفۆن بە دیزاینی iOS',
-          gradient: 'from-red-500 to-slate-800',
           iconText: '📅',
-          downloadUrl: 'https://www.mediafire.com/file/h6lfz11jc9c6sjl/calendar_Prime_V1.apk/file',
-          description: 'ڕۆژژمێری ستایلی ئایفۆن بەبێ ڕیکلام و زۆر سووک لەسەر مۆبایل.'
+          tagline: 'ڕۆژژمێری ئەپڵ (iOS Calendar) بۆ ئەندرۆید.',
+          url: 'https://www.mediafire.com/file/h6lfz11jc9c6sjl/calendar_Prime_V1.apk/file',
+          desc: 'ڕۆژژمێری شێوە ئایفۆن بە دیزاینێکی سادە و جوان بێ ڕیکلام.'
         },
         {
           id: 'dialer-iphone-prime',
           name: 'Dailer iPhone Prime',
+          developer: 'HamaSade iOS',
+          date: 'Oct 16, 2026 • 35 MB',
           category: 'iphone',
-          version: 'Prime V1',
-          sizeMB: 35,
+          palette: 'green',
           featured: false,
-          modTag: 'شاشەی پەیوەندی و تەلەفۆنی شێوە ئایفۆن',
-          gradient: 'from-emerald-500 to-green-700',
           iconText: '📞',
-          downloadUrl: 'https://www.mediafire.com/file/wezqw3miu609vhs/dialer_Prime_V1.apk/file',
-          description: 'گۆڕینی شاشەی پەیوەندیکردن و لێدانی ژمارە بۆ شێوازی ئایفۆن.'
+          tagline: 'شاشەی پەیوەندی و لێدانی ژمارە بە شێوازی ئایفۆن.',
+          url: 'https://www.mediafire.com/file/wezqw3miu609vhs/dialer_Prime_V1.apk/file',
+          desc: 'گۆڕینی شاشەی تەلەفۆن و پەیوەندیکردنی ئەندرۆید بۆ شێوازی ڕەسەنی iOS.'
         },
 
-        // ===== 4. TOOLS, TV & MUSIC (ئامراز و فیلم) =====
+        // === ENTERTAINMENT (فیلم و میوزیک) ===
         {
           id: 'youtube-prime-v5',
           name: 'YouTube Prime',
-          category: 'tools',
-          version: 'Prime V5',
-          sizeMB: 84,
+          developer: 'HamaSade Media',
+          date: 'Oct 28, 2026 • 84 MB',
+          category: 'entertainment',
+          palette: 'crimson',
           featured: false,
-          modTag: 'بێ ڕیکلام + کارکردن لە پاشبنەما و شاشەی کوژاوە',
-          gradient: 'from-red-600 to-rose-900',
           iconText: '▶️',
-          downloadUrl: 'https://www.mediafire.com/file/f9wqsumdqyxg4pn/Youtube_PrimeTuber_V5.apk/file',
-          description: 'سەیرکردنی یوتوب بەبێ هیچ ڕیکلامێک و گوێگرتن لە پاشبنەمای مۆبایل.'
+          tagline: 'سەیرکردنی یوتوب بێ ڕیکلام و کارکردن لە پاشبنەما.',
+          url: 'https://www.mediafire.com/file/f9wqsumdqyxg4pn/Youtube_PrimeTuber_V5.apk/file',
+          desc: 'یوتوب پڕایم V5 بەبێ هیچ ڕیکلامێک و بە توانای لێدانی ڤیدیۆ کاتێک شاشەی مۆبایل کوژاوەتەوە.'
         },
         {
           id: 'mytv-plus-prime-v4',
           name: 'MYTV + Prime',
-          category: 'tools',
-          version: 'Prime V4',
-          sizeMB: 45,
+          developer: 'HamaSade TV',
+          date: 'Oct 25, 2026 • 45 MB',
+          category: 'entertainment',
+          palette: 'purple',
           featured: false,
-          modTag: 'سەیرکردنی کەناڵە وەرزشی و جیهانییەکان و فیلم',
-          gradient: 'from-purple-600 to-indigo-950',
           iconText: '📺',
-          downloadUrl: 'https://www.mediafire.com/file/1oir3rmqkfhdf17/MYTV%252B_Prime_V4.apk/file',
-          description: 'پەخشی ڕاستەوخۆی یارییەکان و کەناڵە جیهانی و کوردییەکان بەخۆڕایی.'
+          tagline: 'پەخشی ڕاستەوخۆی یارییەکان و کەناڵە جیهانییەکان.',
+          url: 'https://www.mediafire.com/file/1oir3rmqkfhdf17/MYTV%252B_Prime_V4.apk/file',
+          desc: 'تەماشاکردنی کەناڵە وەرزشییەکان، فیلم و زنجیرەکان بەخۆڕایی لەسەر مۆبایل.'
         },
         {
           id: 'netflix-prime-v3',
           name: 'NetFlix Prime',
-          category: 'tools',
-          version: 'Prime V3',
-          sizeMB: 62,
+          developer: 'HamaSade Cinema',
+          date: 'Oct 23, 2026 • 62 MB',
+          category: 'entertainment',
+          palette: 'crimson',
           featured: false,
-          modTag: 'سەیرکردنی فیلم و زنجیرەکان بە کوالێتی 4K بێ بەشداری',
-          gradient: 'from-red-700 to-black',
           iconText: 'NF',
-          downloadUrl: 'https://www.mediafire.com/file/qbioui52p30dxah/NetFlix_Prime_V3.apk/file',
-          description: 'تەماشاکردنی نوێترین فیلم و زنجیرە جیهانییەکان بە ژێرنووس و کوالێتی بەرز.'
+          tagline: 'سەیرکردنی فیلم و زنجیرەکان بە کوالێتی 4K بێ هەژمار.',
+          url: 'https://www.mediafire.com/file/qbioui52p30dxah/NetFlix_Prime_V3.apk/file',
+          desc: 'نێتفلیکس پڕایم V3 بۆ بینینی نوێترین فیلم و زنجیرە جیهانییەکان بە ژێرنووس.'
         },
         {
           id: 'blackhole-prime-v1',
-          name: 'Black Hole Music',
-          category: 'tools',
-          version: 'Prime V1',
-          sizeMB: 34,
+          name: 'Black Hole',
+          developer: 'HamaSade Music',
+          date: 'Oct 20, 2026 • 34 MB',
+          category: 'entertainment',
+          palette: 'teal',
           featured: false,
-          modTag: 'داگرتن و گوێگرتن لە گۆرانی بە کوالێتی بەرز بێ ڕیکلام',
-          gradient: 'from-slate-800 to-emerald-900',
           iconText: '🎧',
-          downloadUrl: 'https://www.mediafire.com/file/jh6y67y7bpy1hup/BlackHole_Prime_V1.apk/file',
-          description: 'بەرنامەیەکی نایاب بۆ گوێگرتن و داگرتنی میوزیک بەبێ ئینتەرنێت.'
+          tagline: 'گوێگرتن و داگرتنی گۆرانی بە کوالێتی 320kbps.',
+          url: 'https://www.mediafire.com/file/jh6y67y7bpy1hup/BlackHole_Prime_V1.apk/file',
+          desc: 'بەرنامەی Black Hole Prime بۆ داگرتنی گۆرانی بۆ ناو مۆبایل و گوێگرتن بێ ئینتەرنێت.'
         },
         {
           id: 'djay-pro-prime-v4',
           name: 'DjaY Pro Prime',
-          category: 'tools',
-          version: 'Prime V4',
-          sizeMB: 78,
+          developer: 'HamaSade Audio',
+          date: 'Oct 18, 2026 • 78 MB',
+          category: 'entertainment',
+          palette: 'purple',
           featured: false,
-          modTag: 'تەواوی ئامرازەکانی میکس و DJ کراوەن',
-          gradient: 'from-indigo-600 to-slate-900',
           iconText: '🎛️',
-          downloadUrl: 'https://www.mediafire.com/file/jbsjsqi9e98ja62/DjayPro_Prime_V4.apk/file',
-          description: 'ستۆدیۆی تەواوی دی-جەی و تێکەڵکردنی دەنگ و ئاهەنگ لەسەر مۆبایل.'
+          tagline: 'ستۆدیۆی تێکەڵکردنی دەنگ و DJ بە کراوەیی.',
+          url: 'https://www.mediafire.com/file/jbsjsqi9e98ja62/DjayPro_Prime_V4.apk/file',
+          desc: 'تەواوی ئامرازەکانی میکس و دی-جەی لە بەرنامەی DjaY Pro Prime کراونەتەوە.'
         },
-        {
-          id: 'truecaller-prime-v3',
-          name: 'Trucaller Prime',
-          category: 'tools',
-          version: 'Prime V3',
-          sizeMB: 76,
-          featured: false,
-          modTag: 'Gold کراوە + ناسینەوەی ژمارە + بێ ڕیکلام',
-          gradient: 'from-blue-500 to-cyan-700',
-          iconText: '🆔',
-          downloadUrl: 'https://www.mediafire.com/file/opc95txh36c34p4/TrueCaller_Prime_V3.apk/file',
-          description: 'ئاشکراکردنی ناوی خاوەن ژمارە نەناسراوەکان بە تایبەتمەندی Gold.'
-        },
-        {
-          id: 'ztranslate-prime-v2',
-          name: 'Z Translate Prime',
-          category: 'tools',
-          version: 'Prime V2',
-          sizeMB: 39,
-          featured: false,
-          modTag: 'وەرگێڕانی ڕاستەوخۆی شاشە و ڤیدیۆ و یارییەکان',
-          gradient: 'from-teal-500 to-blue-800',
-          iconText: '🌐',
-          downloadUrl: 'https://www.mediafire.com/file/lq4sm7giu4ltko5/zTranslate_PrimeV2.apk/file',
-          description: 'وەرگێڕانی هەر نووسینێک لەسەر شاشەی مۆبایل و ژێرنووسی ڤیدیۆکان.'
-        },
+
+        // === DEVELOPER & TOOLS (ئامراز و سیستەم) ===
         {
           id: 'hslab-kurd-prime',
           name: 'HS Lab Kurd Prime',
+          developer: 'HamaSade Dev',
+          date: 'Oct 27, 2026 • 44 MB',
           category: 'tools',
-          version: 'Prime V1',
-          sizeMB: 44,
+          palette: 'teal',
           featured: false,
-          modTag: 'تاقیگەی تایبەتی حەمەسادی بە زمانی کوردی',
-          gradient: 'from-emerald-600 to-teal-950',
           iconText: '🧪',
-          downloadUrl: 'https://www.mediafire.com/file/zdjpvdz943ia4oa/HS_LaB_Prime_V1.apk/file',
-          description: 'ئامرازی تایبەتی دیزاین و نووسینی کوردی لەلایەن حەمەسادی.'
+          tagline: 'تاقیگەی تایبەتی دیزاین و فۆنتی کوردی حەمەسادی.',
+          url: 'https://www.mediafire.com/file/zdjpvdz943ia4oa/HS_LaB_Prime_V1.apk/file',
+          desc: 'ئامرازی تایبەتی حەمەسادی بۆ نووسین و دیزاینی پڕۆفیشناڵ بە فۆنتە کوردییەکان.'
         },
         {
           id: 'hs-notes-prime-v1',
           name: 'HS Notes Prime',
+          developer: 'HamaSade Dev',
+          date: 'Oct 24, 2026 • 26 MB',
           category: 'tools',
-          version: 'Prime V1',
-          sizeMB: 26,
+          palette: 'amber',
           featured: false,
-          modTag: 'تێبینییەکانی شێوە ئایفۆن و تایبەت بە حەمەسادی',
-          gradient: 'from-amber-400 to-yellow-700',
           iconText: '📝',
-          downloadUrl: 'https://www.mediafire.com/file/ku8omelua4nd5tc/HsNotes_Prime_V1.apk/file',
-          description: 'بەرنامەی تۆمارکردنی تێبینی بە دیزاینی ناوازە و فۆنتی کوردی.'
+          tagline: 'تۆمارکردنی تێبینی بە دیزاینی ئایفۆن و فۆنتی کوردی.',
+          url: 'https://www.mediafire.com/file/ku8omelua4nd5tc/HsNotes_Prime_V1.apk/file',
+          desc: 'بەرنامەی تێبینییەکانی حەمەسادی بە ڕووکاری مۆدێرن و خێرا.'
+        },
+        {
+          id: 'truecaller-prime-v3',
+          name: 'Trucaller Prime',
+          developer: 'HamaSade Tools',
+          date: 'Oct 22, 2026 • 76 MB',
+          category: 'tools',
+          palette: 'blue',
+          featured: false,
+          iconText: '🆔',
+          tagline: 'ئاشکراکردنی ناوی ژمارە نەناسراوەکان بە تایبەتمەندی Gold.',
+          url: 'https://www.mediafire.com/file/opc95txh36c34p4/TrueCaller_Prime_V3.apk/file',
+          desc: 'تروکۆڵەر پڕایم V3 بە کراوەیی تایبەتمەندییەکانی Gold و بلۆککردنی ژمارەی بێزارکەر.'
+        },
+        {
+          id: 'ztranslate-prime-v2',
+          name: 'Z Translate Prime',
+          developer: 'HamaSade Tools',
+          date: 'Oct 19, 2026 • 39 MB',
+          category: 'tools',
+          palette: 'green',
+          featured: false,
+          iconText: '🌐',
+          tagline: 'وەرگێڕانی ڕاستەوخۆی شاشە و ڤیدیۆ و یارییەکان.',
+          url: 'https://www.mediafire.com/file/lq4sm7giu4ltko5/zTranslate_PrimeV2.apk/file',
+          desc: 'وەرگێڕانی خێرای هەموو دەقێک لەسەر شاشەی مۆبایل و ژێرنووسی ڤیدیۆکان.'
         },
         {
           id: 'baxa-app-prime',
           name: 'BaXa App',
+          developer: 'HamaSade Tools',
+          date: 'Oct 17, 2026 • 31 MB',
           category: 'tools',
-          version: 'Prime V1',
-          sizeMB: 31,
+          palette: 'purple',
           featured: false,
-          modTag: 'وەشانی پڕایم و تایبەتمەندی تەواو',
-          gradient: 'from-indigo-500 to-slate-900',
           iconText: 'BX',
-          downloadUrl: 'https://www.mediafire.com/file/s6wopftsz6o3ft1/BaXa_Prime_V1_.apk/file',
-          description: 'ئەپی BaXa Prime بە تەواوی تایبەتمەندییە کراوەکانەوە.'
+          tagline: 'ئەپی تایبەتی BaXa Prime بە تایبەتمەندی تەواو.',
+          url: 'https://www.mediafire.com/file/s6wopftsz6o3ft1/BaXa_Prime_V1_.apk/file',
+          desc: 'وەشانی پڕایمی ئەپی BaXa بە هەموو تایبەتمەندییە کراوەکانەوە.'
         },
         {
           id: 'hama-cloner-arm',
           name: 'Hama Cloner Arm',
+          developer: 'HamaSade Dev',
+          date: 'Oct 15, 2026 • 48 MB',
           category: 'tools',
-          version: 'ARM Pro',
-          sizeMB: 48,
+          palette: 'amber',
           featured: false,
-          modTag: 'لەبەرگرتنەوە (دووانەکردن)ی هەموو ئەپ و یارییەکان',
-          gradient: 'from-cyan-600 to-indigo-900',
           iconText: '👥',
-          downloadUrl: 'https://linkgenie.me/s/7ponE',
-          description: 'دروستکردنی چەندین کۆپی لە هەر بەرنامەیەک لەسەر یەک مۆبایل بەبێ تێکچوون.'
+          tagline: 'دروستکردنی کۆپی دووەم لە هەر ئەپ و یارییەک.',
+          url: 'https://linkgenie.me/s/7ponE',
+          desc: 'لەبەرگرتنەوە و دووانەکردنی بەرنامەکانی ئەندرۆید بەبێ کێشە لەسەر یەک مۆبایل.'
         },
 
-        // ===== 5. ANDROID GAMES (یارییە خۆشەکانی ئەندرۆید) =====
+        // === GAMES (یارییە خۆشەکانی ئەندرۆید - 11 یاری) ===
         {
           id: 'game-gow-3',
           name: 'God Of War III 3',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 26, 2026 • 18.5 GB',
           category: 'games',
-          version: 'v2.1.6 Mobile',
-          sizeMB: 18500,
+          palette: 'crimson',
           featured: true,
-          modTag: 'یاری ئەفسانەیی کۆنسۆڵ بۆ ئەندرۆید + فایلی تەواو',
-          gradient: 'from-red-700 via-rose-900 to-black',
           iconText: '⚔️',
-          downloadUrl: 'https://t.me/HamaSade/8887',
-          description: 'یاری بەناوبانگی God Of War III بۆ سەر شاشەی مۆبایلەکانی ئەندرۆید لەگەڵ فێرکاری تەواوی ڕێکخستن لە کەناڵی حەمەسادی.'
+          tagline: 'یاری ئەفسانەیی کۆنسۆڵ لەسەر مۆبایلەکەت.',
+          url: 'https://t.me/HamaSade/8887',
+          desc: 'یاری بەناوبانگی God Of War III بۆ ئەندرۆید بە خۆڕایی لەگەڵ هەموو فایلە پێویستەکان و فێرکاری ڤیدیۆیی کارپێکردن لە کەناڵی حەمەسادی.'
         },
         {
           id: 'game-gta-v',
-          name: 'GTA V Mobile',
+          name: 'GTA V',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 22, 2026 • 45 GB',
           category: 'games',
-          version: 'Android Full',
-          sizeMB: 45000,
+          palette: 'green',
           featured: true,
-          modTag: 'ئەزموونی تەواوی جیهانی کراوەی GTA V لەسەر مۆبایل',
-          gradient: 'from-emerald-600 via-green-800 to-slate-950',
           iconText: 'V',
-          downloadUrl: 'https://t.me/HamaSade/8879',
-          description: 'دابەزاندنی یاری GTA V بۆ ئەندرۆید بە فێرکاری هەنگاو بە هەنگاو لە کەناڵی فەرمی حەمەسادی.'
+          tagline: 'جیهانی کراوەی GTA V لەسەر شاشەی ئەندرۆید.',
+          url: 'https://t.me/HamaSade/8879',
+          desc: 'دابەزاندنی یاری GTA V بۆ مۆبایل لەگەڵ فێرکاری تەواوی ڕێکخستنی هەموو بەشەکانی لە کەناڵی حەمەسادی.'
         },
         {
           id: 'game-gta-san-kurdish',
           name: 'GTA SAN Kurdish',
+          developer: 'HamaSade Kurdish Games',
+          date: 'Oct 12, 2026 • 2.9 GB',
           category: 'games',
-          version: 'Kurdish Prime V1',
-          sizeMB: 2900,
+          palette: 'amber',
           featured: true,
-          modTag: 'ژێرنووسی کوردی + گۆرانی بەختیار ساڵح + جلوبەرگ و مێنوی کوردی',
-          gradient: 'from-amber-500 via-orange-700 to-slate-900',
           iconText: 'SA',
-          downloadUrl: 'https://t.me/HamaSade/8865',
-          description: 'چیتەی سان ئەندریس بە زمانی شیرینی کوردی، ژێرنووس، گۆرانی کوردی و مێنوی فێڵی کوردی.'
+          tagline: 'بە زمانی شیرینی کوردی ژێرنووس و گۆرانی و مێنوی کوردی.',
+          url: 'https://t.me/HamaSade/8865',
+          desc: 'چیتەی سان ئەندریس (GTASA Kurdi Prime V1) بۆ ئەندرۆید بە ژێرنووسی کوردی، گۆرانی بەختیار ساڵح، جلوبەرگی کوردی و مێنوی فێڵی کوردی.'
         },
         {
           id: 'game-gta-vc-kurdish',
-          name: 'GTA Vice City Kurdish',
+          name: 'GTA Vicy City Kurdish',
+          developer: 'HamaSade Kurdish Games',
+          date: 'Oct 12, 2026 • 1.6 GB',
           category: 'games',
-          version: 'Kurdish Prime V1',
-          sizeMB: 1600,
+          palette: 'pink',
           featured: false,
-          modTag: 'بە زمانی شیرینی کوردی ژێرنووس و مۆد و مێنوی کوردی',
-          gradient: 'from-pink-500 via-fuchsia-700 to-indigo-950',
           iconText: 'VC',
-          downloadUrl: 'https://t.me/HamaSade/8864',
-          description: 'یاری چیتەی ڤایس سیتی بۆ ئەندرۆید بە ژێرنووس و مێنوی کوردی.'
+          tagline: 'چیتەی ڤایس سیتی بە ژێرنووس و مێنوی زمانی کوردی.',
+          url: 'https://t.me/HamaSade/8864',
+          desc: 'یاری GTA Vice City Kurdish Prime V1 بۆ ئەندرۆید بە زمانی شیرینی کوردی و مۆدی تایبەت.'
         },
         {
           id: 'game-bully-kurdish',
           name: 'BULLY Kurdish',
+          developer: 'HamaSade Kurdish Games',
+          date: 'Oct 12, 2026 • 2.8 GB',
           category: 'games',
-          version: 'Kurdish Prime V1',
-          sizeMB: 2800,
+          palette: 'blue',
           featured: false,
-          modTag: 'یاری بۆڵی بە ژێرنووس و مۆد و مێنوی زمانی کوردی',
-          gradient: 'from-blue-600 via-indigo-800 to-slate-950',
           iconText: 'BL',
-          downloadUrl: 'https://t.me/HamaSade/8863',
-          description: 'یاری بەناوبانگی Bully بۆ ئەندرۆید بە زمانی شیرینی کوردی و مێنوی تایبەت.'
+          tagline: 'یاری بۆڵی بە ژێرنووس و مۆد و مێنوی کوردی.',
+          url: 'https://t.me/HamaSade/8863',
+          desc: 'یاری بەناوبانگی Bully Kurdish Prime V1 بۆ ئەندرۆید بە زمانی شیرینی کوردی.'
         },
         {
           id: 'game-choo-choo-charles',
           name: 'Choo Choo Charles',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 10, 2026 • 420 MB',
           category: 'games',
-          version: 'Mod APK',
-          sizeMB: 420,
+          palette: 'crimson',
           featured: false,
-          modTag: 'وەشانی تەواوی مۆبایل + مۆدکراو',
-          gradient: 'from-red-600 to-slate-950',
           iconText: '🚂',
-          downloadUrl: 'https://t.me/HamaSade/8674',
-          description: 'یاری ترسناک و سەرکێشی شەمەندەفەرەکەی Choo Choo Charles بۆ ئەندرۆید.'
+          tagline: 'یاری ترسناک و سەرکێشی شەمەندەفەرەکە بۆ مۆبایل.',
+          url: 'https://t.me/HamaSade/8674',
+          desc: 'یاری Choo Choo Charles بۆ ئەندرۆید بەخۆڕایی و بە کوالێتی بەرز.'
         },
         {
           id: 'game-car-parking',
-          name: 'Car Parking Multiplayer',
+          name: 'Car Parking',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 09, 2026 • 950 MB',
           category: 'games',
-          version: 'Mod Unlimited',
-          sizeMB: 950,
+          palette: 'purple',
           featured: false,
-          modTag: 'پارەی بێسنوور + هەموو سەیارەکان کراوەن',
-          gradient: 'from-sky-500 to-indigo-900',
           iconText: '🏎️',
-          downloadUrl: 'https://t.me/HamaSade/8670',
-          description: 'وەشانی مۆدکراوی Car Parking بە پارەی بێسنوور و کردنەوەی هەموو ئۆتۆمبێلەکان.'
+          tagline: 'پارەی بێسنوور و کردنەوەی هەموو سەیارەکان.',
+          url: 'https://t.me/HamaSade/8670',
+          desc: 'وەشانی مۆدکراوی Car Parking Multiplayer بە پارەی بێسنوور و کردنەوەی هەموو ئۆتۆمبێلەکان.'
         },
         {
           id: 'game-dragon-8ball',
           name: 'DraGon 8Ball Pool',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 08, 2026 • 115 MB',
           category: 'games',
-          version: 'Mod V1',
-          sizeMB: 115,
+          palette: 'teal',
           featured: false,
-          modTag: 'هێڵی درێژی ئامانج (Long Line) + مۆدی تایبەت',
-          gradient: 'from-emerald-600 to-slate-950',
           iconText: '🎱',
-          downloadUrl: 'https://www.mediafire.com/file/gi9n7wvfe7q49lb/DraGon_8Ball_V1_.apk/file',
-          description: 'مۆدی تایبەتی بلیارد DraGon 8Ball Pool بە هێڵی درێژ و بردنەوەی ئاسان.'
+          tagline: 'هێڵی درێژی ئامانج بۆ بردنەوەی هەموو یارییەکان.',
+          url: 'https://www.mediafire.com/file/gi9n7wvfe7q49lb/DraGon_8Ball_V1_.apk/file',
+          desc: 'مۆدی تایبەتی بلیارد DraGon 8Ball V1 بە هێڵی ئامانجی درێژ بەبێ باند.'
         },
         {
           id: 'game-subway-surfers',
-          name: 'Subway Surfers Mod',
+          name: 'Subway Surfers',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 07, 2026 • 160 MB',
           category: 'games',
-          version: 'Mod Unlimited',
-          sizeMB: 160,
+          palette: 'amber',
           featured: false,
-          modTag: 'پارە و کلیلی بێسنوور + هەموو کارەکتەرەکان',
-          gradient: 'from-orange-500 to-amber-700',
           iconText: '🛹',
-          downloadUrl: 'https://t.me/HamaSade/8673',
-          description: 'یاری خۆشەویستی Subway Surfers بە پارە و کلیلی بێکۆتا.'
+          tagline: 'پارە و کلیلی بێسنوور و هەموو کارەکتەرەکان کراوەن.',
+          url: 'https://t.me/HamaSade/8673',
+          desc: 'یاری Subway Surfers بە مۆدی پارە و کلیلی بێکۆتا بۆ ئەندرۆید.'
         },
         {
           id: 'game-minecraft',
-          name: 'Minecraft PE',
+          name: 'Minecraft',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 06, 2026 • 240 MB',
           category: 'games',
-          version: 'Unlocked',
-          sizeMB: 240,
+          palette: 'green',
           featured: false,
-          modTag: 'وەشانی فەرمی و کراوە + سکینەکان کراوەن',
-          gradient: 'from-lime-600 to-emerald-950',
           iconText: '⛏️',
-          downloadUrl: 'https://t.me/HamaSade/8675',
-          description: 'یاری ماینکرافت بۆ ئەندرۆید بە خۆڕایی و بە هەموو تایبەتمەندییەکانەوە.'
+          tagline: 'وەشانی تەواوی ماینکرافت بەخۆڕایی و سکینی کراوە.',
+          url: 'https://t.me/HamaSade/8675',
+          desc: 'یاری Minecraft PE بۆ ئەندرۆید بە کراوەیی هەموو بەشەکان.'
         },
         {
           id: 'game-truckers-europe-3',
           name: 'Truckers Of Europe 3',
+          developer: 'HamaSade Gaming',
+          date: 'Oct 05, 2026 • 490 MB',
           category: 'games',
-          version: 'Mod Money',
-          sizeMB: 490,
+          palette: 'blue',
           featured: false,
-          modTag: 'پارەی بێسنوور + کڕینی هەموو بارهەڵگرەکان',
-          gradient: 'from-blue-700 to-slate-900',
           iconText: '🚛',
-          downloadUrl: 'https://t.me/HamaSade/8669',
-          description: 'یاری لێخوڕینی بارهەڵگر لە ئەوروپا بە گرافیکی ڕاستەقینە و پارەی بێسنوور.'
+          tagline: 'لێخوڕینی بارهەڵگر بە پارەی بێسنوور.',
+          url: 'https://t.me/HamaSade/8669',
+          desc: 'یاری Truckers Of Europe 3 بە مۆدی پارەی بێسنوور و کڕینی هەموو بارهەڵگرەکان.'
         }
       ];
 
-      const DEFAULT_NEWS = [
+      // Real News Items from HamaSade
+      const NEWS_LIST = [
         {
-          id: 'news-snap-v6',
-          title: '🔥 ئەبدەیتی تازەی سناپچات پڕایم (Snapchat Prime V6) گەیشت!',
+          id: 'n1',
+          badge: 'ئەپدەیتی نوێ',
+          color: '#8429ff',
+          bg: '#efe7fe',
+          title: 'سناپچات پڕایم Snapchat Prime V6 بە سوپرایزی نوێوە گەیشت!',
           date: '٣١ی تشرینی یەکەمی ٢٠٢٦',
-          body: 'لە ئەبدەیتی تازەی Snapchat Prime V6 دوو بەشی ناوازە و سوپرایزمان بۆ کردوونەتەوە:\n\n١. سەیرکردنی ستریک و سکۆر بە نهێنی بێ دیاربوون.\n٢. سەیرکردنی ستۆری و نامە بە نهێنی.\n٣. چارەسەرکردنی کێشەی SS06 و SS07 بۆ ئەندرۆید.\n٤. زیادکردنی ئیمۆجی نوێی ئایفۆن و زمانی کوردی.\n\nپێش دامەزراندن سناپە کۆنەکەت بسڕەوە و لە بەشی ئەپەکان ڕاستەوخۆ دایبەزێنە.'
+          body: 'لە ئەبدەیتی تازەی سناپچات پڕایم V6 دوو بەشی ناوازە زیادکراون: سەیرکردنی ستریک و سکۆر بە نهێنی، و سەیرکردنی ستۆری و نامە بە نهێنی بێ دیاربوون، لەگەڵ چارەسەری تەواوی کێشەی SS06 و SS07 بۆ ئەندرۆید.'
         },
         {
-          id: 'news-kurdish-games',
-          title: '🎮 یارییەکانی GTA San Andreas، Vice City و Bully بە زمانی کوردی!',
+          id: 'n2',
+          badge: 'یاری کوردی',
+          color: '#0d747c',
+          bg: '#dcf2f4',
+          title: 'یارییەکانی GTA San Andreas و Vice City و Bully بە زمانی کوردی!',
           date: '٢٦ی تشرینی یەکەمی ٢٠٢٦',
-          body: 'ئێستا لە ستۆری حەمەسادی دەتوانن هەرسێ یاری بەناوبانگی GTA San Andreas و GTA Vice City و Bully بۆ ئەندرۆید دابەزێنن بە ژێرنووسی زمانی شیرینی کوردی، گۆرانی بەختیار ساڵح، جلوبەرگی کوردی و مێنوی فێڵی کوردی!'
+          body: 'ئێستا دەتوانن هەرسێ یاری بەناوبانگ بە زمانی شیرینی کوردی ژێرنووس و گۆرانی بەختیار ساڵح و جلوبەرگی کوردی و مێنوی فێڵی کوردی ڕاستەوخۆ لە ستۆری حەمەسادی دابەزێنن.'
         },
         {
-          id: 'news-gow-gtav',
-          title: '⚔️ چۆنیەتی کارپێکردنی God Of War III و GTA V لەسەر مۆبایل',
+          id: 'n3',
+          badge: 'کۆنسۆڵ لەسەر مۆبایل',
+          color: '#f00075',
+          bg: '#fde4f1',
+          title: 'هەنگاو بە هەنگاو کارپێکردنی God Of War III و GTA V لەسەر ئەندرۆید',
           date: '٢٢ی تشرینی یەکەمی ٢٠٢٦',
-          body: 'ئەم یارییە گەورانە لەسەر مۆبایلەکانی ئەندرۆید کە پڕۆسێسەری Snapdragonـیان هەیە زۆر بە نایابی کار دەکەن. بۆ زانینی جۆری پڕۆسێسەری مۆبایلەکەت بڕۆ بۆ Settings >> About Phone. تەواوی فایل و فێرکارییە ڤیدیۆییەکان لە بەشی یارییەکان دانراون.'
+          body: 'بە گشتی لەسەر مۆبایلەکانی ئەندرۆید کە پڕۆسێسەری Snapdragonـیان هەیە زۆر بە نایابی کار دەکەن. لە بەشی یارییەکان کرتە لەسەر یارییەکە بکە بۆ وەرگرتنی فایل و فێرکاری ڤیدیۆیی.'
         },
         {
-          id: 'news-security-alert',
-          title: '⚠️ ئاگادارییەکی زۆر گرنگ لەسەر فێڵە ئۆنڵاینەکانی سۆشیاڵ میدیا',
+          id: 'n4',
+          badge: 'هۆشیاری و سەلامەتی',
+          color: '#e59400',
+          bg: '#fff4d6',
+          title: 'ئاگاداری ئەم فێڵە بن لە ئینستاگرام و فەیسبووک و تیکتۆک!',
           date: '٢٤ی تشرینی یەکەمی ٢٠٢٦',
-          body: 'ئاگاداری ئەو نامە ساختانە بن کە بە ناوی پڕۆژەی کار و کۆمپانیاوە داوای وێنە و ڤیدیۆ یان پەیوەندی ڤیدیۆیی دەکەن لە ئینستاگرام و تیکتۆک و فەیسبووک. هەرگیز متمانە بە پەیجی نەناسراو مەکەن و زانیاری کەسی مەنێرن.'
+          body: 'وریای ئەو نامە ساختانە بن کە بە ناوی پڕۆژەی کار و دامەزراندنەوە داوای وێنە یان پەیوەندی ڤیدیۆیی دەکەن؛ هەرگیز زانیاری کەسی و وێنەی تایبەت بۆ پەیجی نەناسراو مەنێرن.'
         }
       ];
-      /*DATA_END*/
 
       let state = {
-        activeTab: 'store',
-        selectedCat: 'all',
+        activeTab: 'browse',
+        selectedCat: null,
+        showAllBrowse: false,
         searchQuery: '',
-        isAdmin: false,
-        adminPass: storage.get('hs_admin_pass_v4', DEFAULT_ADMIN_PASS),
-        theme: storage.get('hs_theme_v4', 'dark'),
-        apps: storage.get('hs_apps_v4', DEFAULT_APPS),
-        news: storage.get('hs_news_v4', DEFAULT_NEWS),
-        favorites: storage.get('hs_favs_v4', ['snapchat-prime-v6', 'capcut-prime-v13', 'game-gta-san-kurdish']),
-        downloads: storage.get('hs_downloads_v4', [])
+        myAppsFilter: 'all',
+        downloadedIds: JSON.parse(localStorage.getItem('hs_alt_downloaded') || '[]')
+      };
+
+      const CATEGORY_NAMES = {
+        social: 'Social • سۆشیاڵ پڕایم',
+        games: 'Games • یارییەکان',
+        media: 'Photo & Video • وێنە و مۆنتاژ',
+        iphone: 'Lifestyle & iOS • ئایفۆن و کیبۆرد',
+        entertainment: 'Entertainment • فیلم و میوزیک',
+        tools: 'Developer & Tools • ئامرازەکان'
       };
 
       let toastTimer = null;
@@ -1133,829 +1201,378 @@
         txt.textContent = msg;
         box.classList.remove('hidden');
         if (toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => box.classList.add('hidden'), 2500);
+        toastTimer = setTimeout(() => box.classList.add('hidden'), 2400);
       }
 
-      function formatSize(mb) {
-        if (mb >= 1000) return (mb / 1000).toFixed(1).replace(/\.0$/, '') + ' GB';
-        return mb + ' MB';
-      }
-
-      function applyTheme() {
-        const htmlEl = document.documentElement;
-        if (state.theme === 'dark') {
-          htmlEl.classList.add('dark');
-          document.getElementById('themeIconSun').classList.remove('hidden');
-          document.getElementById('themeIconMoon').classList.add('hidden');
-        } else {
-          htmlEl.classList.remove('dark');
-          document.getElementById('themeIconSun').classList.add('hidden');
-          document.getElementById('themeIconMoon').classList.remove('hidden');
-        }
-      }
-
-      function updateAdminUI() {
-        const studioBtn = document.getElementById('openStudioBtn');
-        const logoutBtn = document.getElementById('adminLogoutBtn');
-        const lockBtn = document.getElementById('adminLockBtn');
-        const activeBar = document.getElementById('adminActiveBar');
-
-        if (state.isAdmin) {
-          studioBtn.classList.remove('hidden');
-          studioBtn.classList.add('inline-flex');
-          logoutBtn.classList.remove('hidden');
-          lockBtn.classList.add('hidden');
-          activeBar.classList.remove('hidden');
-        } else {
-          studioBtn.classList.add('hidden');
-          studioBtn.classList.remove('inline-flex');
-          logoutBtn.classList.add('hidden');
-          lockBtn.classList.remove('hidden');
-          activeBar.classList.add('hidden');
-        }
-        renderFeatured();
-        renderApps();
-        renderGamesHub();
-        renderNews();
-      }
-
-      function switchTab(tabName) {
-        state.activeTab = tabName;
-        ['store', 'games', 'news', 'downloads'].forEach(t => {
-          const el = document.getElementById('tab-' + t);
-          if (el) el.classList.toggle('hidden', t !== tabName);
-        });
-
-        document.getElementById('globalSearchWrapper').classList.toggle('hidden', tabName === 'downloads');
-
-        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
-          const active = btn.getAttribute('data-tab') === tabName;
-          btn.className = 'nav-tab-btn tap-scale relative flex flex-col items-center justify-center py-1 rounded-2xl ' +
-            (active ? 'text-emerald-500 font-extrabold' : 'text-slate-400 font-semibold');
-        });
-
-        if (tabName === 'store') {
-          renderFeatured();
-          renderApps();
-        }
-        if (tabName === 'games') renderGamesHub();
-        if (tabName === 'news') renderNews();
-        if (tabName === 'downloads') renderDownloadsAndFavs();
-      }
-
-      function renderFeatured() {
-        const wrap = document.getElementById('featuredSection');
-        const carousel = document.getElementById('featuredCarousel');
-        if (!wrap || !carousel) return;
-
-        if (state.searchQuery.trim() || state.selectedCat !== 'all') {
-          wrap.classList.add('hidden');
-          return;
-        }
-        wrap.classList.remove('hidden');
-
-        const featuredApps = state.apps.filter(a => a.featured).slice(0, 5);
-        carousel.innerHTML = featuredApps.map(app => `
-          <div data-detail-id="${app.id}" class="open-detail-btn snap-start shrink-0 w-[265px] sm:w-[290px] rounded-3xl p-4 bg-gradient-to-br ${app.gradient} text-white shadow-lg cursor-pointer tap-scale flex flex-col justify-between gap-3 relative overflow-hidden">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-black/30 backdrop-blur-md text-[10px] font-extrabold">${app.version}</span>
-              <span class="text-[11px] font-bold opacity-90">${formatSize(app.sizeMB)}</span>
-            </div>
-            <div class="flex items-center gap-3 my-1">
-              <div class="w-13 h-13 w-12 h-12 squircle bg-white/15 backdrop-blur-md flex items-center justify-center text-xl font-black shrink-0 border border-white/20">
+      // Build an exact AltStore Pastel App Row Card (Screenshot 1 & 2)
+      function createAltStoreAppRowHTML(app, showSubtitleAsDev) {
+        const pal = PALETTES[app.palette] || PALETTES.teal;
+        const subtitle = showSubtitleAsDev ? app.developer : app.date;
+        return `
+          <div data-app-id="${app.id}" class="open-app-row tap-active rounded-[22px] p-3.5 flex items-center justify-between gap-3 cursor-pointer" style="background-color: ${pal.cardBg};">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div class="w-[58px] h-[58px] alt-icon flex items-center justify-center text-white font-black text-xl shrink-0" style="background: ${pal.iconGrad};">
                 ${app.iconText}
               </div>
               <div class="min-w-0">
-                <h3 class="font-black text-sm sm:text-base truncate">${app.name}</h3>
-                <p class="text-[11px] text-white/85 line-clamp-1 font-medium">${app.modTag}</p>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-2 border-t border-white/15 text-xs">
-              <span class="font-bold text-white/90">تاقیکراوە و سەلامەت ✓</span>
-              <span class="px-3 py-1 rounded-full bg-white text-slate-950 font-black text-[11px]">دابەزاندن</span>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      function buildAppCardHTML(app) {
-        return `
-          <div class="rounded-3xl p-3.5 bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] flex flex-col justify-between gap-2.5 shadow-sm">
-            <div class="flex items-center gap-3">
-              <div data-detail-id="${app.id}" class="open-detail-btn w-13 h-13 w-12 h-12 squircle bg-gradient-to-br ${app.gradient || 'from-emerald-600 to-teal-900'} flex items-center justify-center text-white font-black text-base shrink-0 cursor-pointer shadow-md tap-scale">
-                ${app.iconText || 'HS'}
-              </div>
-              <div data-detail-id="${app.id}" class="open-detail-btn min-w-0 flex-1 cursor-pointer">
                 <div class="flex items-center gap-1.5">
-                  <h3 class="font-extrabold text-sm truncate text-slate-900 dark:text-white">${app.name}</h3>
+                  <h3 class="font-extrabold text-[16px] text-slate-950 truncate leading-snug">${app.name}</h3>
+                  <!-- Exact AltStore Teal Verified Diamond Badge -->
+                  <span class="w-4 h-4 rounded-full bg-[#2a858e] inline-flex items-center justify-center shrink-0">
+                    <span class="w-1.5 h-1.5 rotate-45 bg-white block"></span>
+                  </span>
                 </div>
-                <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold truncate mt-0.5">${app.modTag}</p>
-                <div class="flex items-center gap-2 text-[10px] text-slate-400 font-semibold mt-0.5">
-                  <span>${app.version}</span>
-                  <span>•</span>
-                  <span dir="ltr">${formatSize(app.sizeMB)}</span>
-                </div>
+                <p class="text-[12px] font-semibold truncate mt-0.5" style="color: ${pal.subText};" dir="ltr">${subtitle}</p>
               </div>
-              <button data-dl-id="${app.id}" class="start-dl-btn tap-scale px-4 py-2 rounded-full bg-emerald-500/15 hover:bg-emerald-500 text-emerald-600 dark:text-emerald-400 hover:text-slate-950 text-xs font-black shrink-0 transition">
-                داگرتن
-              </button>
             </div>
 
-            ${state.isAdmin ? `
-              <div class="pt-2 border-t border-slate-100 dark:border-white/[0.06] flex items-center justify-end gap-2 text-[11px]">
-                <button data-edit-app="${app.id}" class="edit-app-btn px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-500 font-bold">✏️ دەستکاری</button>
-                <button data-del-app="${app.id}" class="del-app-btn px-2.5 py-1 rounded-xl bg-rose-500/15 text-rose-500 font-bold">🗑️ سڕینەوە</button>
-              </div>
-            ` : ''}
+            <button data-dl-id="${app.id}" class="quick-dl-btn px-5 py-2 rounded-full text-white font-extrabold text-xs tracking-wide shrink-0 shadow-sm" style="background-color: ${pal.btnBg};">
+              FREE
+            </button>
           </div>
         `;
       }
 
-      function renderApps() {
-        const grid = document.getElementById('appsGrid');
-        const empty = document.getElementById('appsEmptyState');
+      // Render Browse Tab
+      function renderBrowse() {
+        const listEl = document.getElementById('browseAppsList');
+        const catHeader = document.getElementById('activeCatHeader');
+        const catTitle = document.getElementById('activeCatTitle');
+        const catCount = document.getElementById('activeCatCount');
+        const heading = document.getElementById('browseListHeading');
+        const toggleBtn = document.getElementById('toggleShowAllBrowseBtn');
+        const catSection = document.getElementById('categoriesSection');
+
         const q = state.searchQuery.trim().toLowerCase();
 
-        const filtered = state.apps.filter(app => {
-          const matchCat = state.selectedCat === 'all' || app.category === state.selectedCat;
+        let filtered = APPS.filter(app => {
+          const matchCat = !state.selectedCat || app.category === state.selectedCat;
           const matchQ = !q ||
             app.name.toLowerCase().includes(q) ||
-            app.modTag.toLowerCase().includes(q) ||
-            app.description.toLowerCase().includes(q);
+            app.tagline.toLowerCase().includes(q) ||
+            app.desc.toLowerCase().includes(q);
           return matchCat && matchQ;
         });
 
-        if (filtered.length === 0) {
-          grid.innerHTML = '';
-          empty.classList.remove('hidden');
-          return;
-        }
-        empty.classList.add('hidden');
-        grid.innerHTML = filtered.map(buildAppCardHTML).join('');
-      }
-
-      function renderGamesHub() {
-        const grid = document.getElementById('gamesHubGrid');
-        if (!grid) return;
-        const q = state.searchQuery.trim().toLowerCase();
-        const games = state.apps.filter(a => a.category === 'games' && (!q || a.name.toLowerCase().includes(q) || a.modTag.toLowerCase().includes(q)));
-        grid.innerHTML = games.map(buildAppCardHTML).join('');
-      }
-
-      function openAppDetail(appId) {
-        const app = state.apps.find(a => a.id === appId);
-        if (!app) return;
-        const isFav = state.favorites.includes(app.id);
-        const modal = document.getElementById('appDetailModal');
-        const content = document.getElementById('appDetailContent');
-
-        content.innerHTML = `
-          <div class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/10">
-            <div class="flex items-center gap-3.5">
-              <div class="w-16 h-16 squircle bg-gradient-to-br ${app.gradient || 'from-emerald-600 to-teal-900'} flex items-center justify-center text-white font-black text-2xl shadow-lg">
-                ${app.iconText || 'HS'}
-              </div>
-              <div>
-                <h2 class="font-black text-base sm:text-lg text-slate-900 dark:text-white">${app.name}</h2>
-                <p class="text-xs text-emerald-500 font-bold">HamaSade Prime Verified ✓</p>
-                <p class="text-[11px] text-slate-400 mt-0.5">${app.version} • <span dir="ltr">${formatSize(app.sizeMB)}</span></p>
-              </div>
-            </div>
-            <button id="closeAppDetailBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold">✕</button>
-          </div>
-
-          <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 text-xs space-y-1">
-            <div class="font-extrabold text-emerald-600 dark:text-emerald-400">✨ تایبەتمەندییەکانی مۆد:</div>
-            <div class="font-bold text-slate-900 dark:text-white leading-relaxed">${app.modTag}</div>
-          </div>
-
-          <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${app.description}</p>
-
-          <div class="flex gap-2.5 pt-2">
-            <button data-dl-id="${app.id}" class="modal-dl-btn tap-scale flex-1 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-emerald-500/20">
-              ⬇️ دابەزاندنی ڕاستەوخۆ
-            </button>
-            <button data-fav-id="${app.id}" class="modal-fav-btn tap-scale px-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-xs font-extrabold ${isFav ? 'text-rose-500 bg-rose-500/10 border-rose-500/30' : ''}">
-              ${isFav ? '♥ دڵخواز' : '♡ دڵخواز'}
-            </button>
-          </div>
-        `;
-
-        modal.classList.remove('hidden');
-        document.getElementById('closeAppDetailBtn').addEventListener('click', () => modal.classList.add('hidden'));
-        content.querySelector('.modal-dl-btn').addEventListener('click', () => {
-          startDownload(app.id);
-          modal.classList.add('hidden');
-        });
-        content.querySelector('.modal-fav-btn').addEventListener('click', () => {
-          toggleFavorite(app.id);
-          openAppDetail(app.id);
-        });
-      }
-
-      function startDownload(appId) {
-        const app = state.apps.find(a => a.id === appId);
-        if (!app) return;
-
-        if (app.downloadUrl && app.downloadUrl.startsWith('http')) {
-          window.open(app.downloadUrl, '_blank', 'noopener');
-        }
-
-        const dlEntry = {
-          id: 'dl-' + Date.now(),
-          appId: app.id,
-          name: app.name,
-          version: app.version,
-          sizeMB: app.sizeMB
-        };
-
-        state.downloads = [dlEntry, ...state.downloads.filter(d => d.appId !== app.id)];
-        storage.set('hs_downloads_v4', state.downloads);
-        document.getElementById('navDlDot').classList.remove('hidden');
-        showToast(`دابەزاندنی ${app.name} دەستی پێکرد ⬇️`);
-      }
-
-      function toggleFavorite(appId) {
-        const idx = state.favorites.indexOf(appId);
-        if (idx > -1) {
-          state.favorites.splice(idx, 1);
-          showToast('لە دڵخوازەکان لادرا');
+        if (state.selectedCat) {
+          catHeader.classList.remove('hidden');
+          catHeader.classList.add('flex');
+          catTitle.textContent = CATEGORY_NAMES[state.selectedCat] || state.selectedCat;
+          catCount.textContent = `(${filtered.length})`;
+          heading.textContent = CATEGORY_NAMES[state.selectedCat];
+          toggleBtn.classList.add('hidden');
+        } else if (q) {
+          catHeader.classList.add('hidden');
+          catHeader.classList.remove('flex');
+          heading.textContent = `ئەنجامی گەڕان (${filtered.length})`;
+          toggleBtn.classList.add('hidden');
         } else {
-          state.favorites.push(appId);
-          showToast('خرایە لیستی دڵخوازەکان ❤️');
+          catHeader.classList.add('hidden');
+          catHeader.classList.remove('flex');
+          heading.textContent = 'New & Updated • نوێکراوەکان';
+          toggleBtn.classList.remove('hidden');
+          toggleBtn.textContent = state.showAllBrowse ? 'کەمکردنەوە' : `بینینی هەمووی (${APPS.length})`;
+          if (!state.showAllBrowse) {
+            filtered = filtered.slice(0, 6);
+          }
         }
-        storage.set('hs_favs_v4', state.favorites);
-        if (state.activeTab === 'downloads') renderDownloadsAndFavs();
-      }
 
-      function renderNews() {
-        const grid = document.getElementById('newsGrid');
-        const q = state.searchQuery.trim().toLowerCase();
-        const list = state.news.filter(n => !q || n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q));
+        catSection.classList.toggle('hidden', Boolean(q));
 
-        if (list.length === 0) {
-          grid.innerHTML = `<div class="p-6 rounded-3xl text-center text-xs text-slate-500 bg-white dark:bg-[#131b2e]">هیچ هەواڵێک نییە</div>`;
+        if (filtered.length === 0) {
+          listEl.innerHTML = `<div class="p-8 rounded-[22px] bg-[#f2f2f7] text-center text-xs font-bold text-slate-500">هیچ ئەپێک نەدۆزرایەوە بەم ناوە</div>`;
           return;
         }
 
-        grid.innerHTML = list.map(n => `
-          <div class="rounded-3xl p-4 bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] space-y-2 shadow-sm">
-            <div class="flex items-center justify-between text-[11px] text-slate-400">
-              <span class="px-2 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-500 font-extrabold">هەواڵ و فێرکاری</span>
-              <span>${n.date}</span>
+        listEl.innerHTML = filtered.map(a => createAltStoreAppRowHTML(a, false)).join('');
+      }
+
+      // Render Sources Tab
+      function renderSources() {
+        const listEl = document.getElementById('sourceFeaturedList');
+        const featured = APPS.filter(a => a.featured);
+        listEl.innerHTML = featured.map(a => createAltStoreAppRowHTML(a, true)).join('');
+      }
+
+      // Render News Tab
+      function renderNews() {
+        const container = document.getElementById('newsCardsContainer');
+        container.innerHTML = NEWS_LIST.map(n => `
+          <article class="rounded-[24px] p-5 space-y-2" style="background-color: ${n.bg};">
+            <div class="flex items-center justify-between text-[11px] font-extrabold">
+              <span class="px-2.5 py-0.5 rounded-full text-white" style="background-color: ${n.color};">${n.badge}</span>
+              <span class="text-slate-500">${n.date}</span>
             </div>
-            <h3 class="font-extrabold text-sm text-slate-900 dark:text-white leading-snug">${n.title}</h3>
-            <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">${n.body}</p>
-            <div class="pt-1 flex items-center justify-between">
-              <button data-read-news="${n.id}" class="read-news-btn text-xs font-extrabold text-emerald-500">خوێندنەوەی تەواو ←</button>
-              ${state.isAdmin ? `
-                <div class="flex items-center gap-2 text-[11px]">
-                  <button data-edit-news="${n.id}" class="edit-news-btn px-2.5 py-1 rounded-xl bg-amber-500/15 text-amber-500 font-bold">✏️ دەستکاری</button>
-                  <button data-del-news="${n.id}" class="del-news-btn px-2.5 py-1 rounded-xl bg-rose-500/15 text-rose-500 font-bold">🗑️ سڕینەوە</button>
-                </div>
-              ` : ''}
-            </div>
-          </div>
+            <h3 class="font-black text-base text-slate-950 leading-snug">${n.title}</h3>
+            <p class="text-xs text-slate-700 leading-relaxed">${n.body}</p>
+          </article>
         `).join('');
       }
 
-      function openNewsDetail(newsId) {
-        const item = state.news.find(n => n.id === newsId);
-        if (!item) return;
-        const modal = document.getElementById('newsDetailModal');
-        const content = document.getElementById('newsDetailContent');
+      // Render My Apps Tab
+      function renderMyApps() {
+        const container = document.getElementById('myAppsListContainer');
+        const badge = document.getElementById('myAppsCountBadge');
+
+        let list = APPS;
+        if (state.myAppsFilter === 'downloaded') {
+          list = APPS.filter(a => state.downloadedIds.includes(a.id));
+        } else if (state.myAppsFilter === 'games') {
+          list = APPS.filter(a => a.category === 'games');
+        }
+
+        badge.textContent = list.length + ' ئەپ';
+
+        if (list.length === 0) {
+          container.innerHTML = `<div class="p-8 rounded-[22px] bg-[#f2f2f7] text-center text-xs font-bold text-slate-500">هیچ ئەپێک لەم بەشەدا نییە. کرتە لەسەر FREE بکە بۆ داگرتنی ئەپەکان.</div>`;
+          return;
+        }
+
+        container.innerHTML = list.map(a => createAltStoreAppRowHTML(a, true)).join('');
+      }
+
+      // Open Exact AltStore Screenshot 3 App Detail Sheet!
+      function openAppDetailSheet(appId) {
+        const app = APPS.find(a => a.id === appId);
+        if (!app) return;
+        const pal = PALETTES[app.palette] || PALETTES.purple;
+        const sheet = document.getElementById('appDetailSheet');
+        const content = document.getElementById('appDetailContent');
 
         content.innerHTML = `
-          <div class="flex items-start justify-between gap-2 border-b border-slate-200 dark:border-white/10 pb-3">
-            <div>
-              <h2 class="font-black text-base leading-snug">${item.title}</h2>
-              <p class="text-[11px] text-slate-400 mt-1">${item.date}</p>
+          <!-- Glowing Radial Header (Exact Match to Screenshot 3) -->
+          <div class="relative pt-5 pb-12 px-4" style="background: ${pal.heroMesh};">
+            <div class="mb-3 flex items-center justify-between">
+              <button id="closeAppSheetBtn" class="w-9 h-9 rounded-full bg-white/35 backdrop-blur-md flex items-center justify-center text-slate-900 font-black text-lg tap-active">
+                ›
+              </button>
+              <span class="text-xs font-extrabold text-white/90" dir="ltr">${app.date}</span>
             </div>
-            <button id="closeNewsModalBtn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold shrink-0">✕</button>
+
+            <!-- Frosted Glass App Header Bar -->
+            <div class="alt-frosted-card rounded-[24px] p-3.5 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-[58px] h-[58px] alt-icon flex items-center justify-center text-white font-black text-2xl shrink-0" style="background: ${pal.iconGrad};">
+                  ${app.iconText}
+                </div>
+                <div class="min-w-0">
+                  <h2 class="font-black text-[17px] text-slate-950 truncate leading-tight">${app.name}</h2>
+                  <p class="text-xs font-semibold truncate mt-0.5" style="color: ${pal.subText};">${app.developer}</p>
+                </div>
+              </div>
+
+              <button id="sheetMainDownloadBtn" class="px-5 py-2 rounded-full text-white font-extrabold text-xs tracking-wide shrink-0 shadow-md tap-active" style="background-color: ${pal.btnBg};">
+                FREE
+              </button>
+            </div>
           </div>
-          <div class="text-xs sm:text-sm text-slate-700 dark:text-slate-200 leading-loose whitespace-pre-line">${item.body}</div>
+
+          <!-- Curved White Body (Exact Match to Screenshot 3) -->
+          <div class="bg-white rounded-t-[30px] -mt-6 relative z-10 px-5 pt-6 pb-8 space-y-5">
+            <!-- Centered Tagline -->
+            <p class="text-center text-xs sm:text-sm font-bold text-slate-800">${app.tagline}</p>
+
+            <!-- 2 Side-by-Side Tall Preview Cards (Like Delta Handheld Skins in Screenshot 3) -->
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Preview Card 1: Visual Screen + Controller/UI -->
+              <div class="rounded-[22px] overflow-hidden border border-slate-200/80 shadow-sm flex flex-col justify-between bg-slate-950 text-white p-3.5 h-[280px]">
+                <div class="rounded-xl p-3 flex-1 flex flex-col items-center justify-center text-center space-y-2" style="background: ${pal.iconGrad};">
+                  <div class="text-3xl">${app.iconText}</div>
+                  <div class="font-black text-xs leading-tight">${app.name}</div>
+                  <span class="px-2 py-0.5 rounded-full bg-black/30 text-[9px] font-bold">PRIME MOD</span>
+                </div>
+                <div class="pt-3 space-y-2 text-center">
+                  <div class="text-[10px] font-extrabold tracking-widest text-slate-400 uppercase">HAMASADE EDITION</div>
+                  <div class="flex items-center justify-around py-1">
+                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-black">✚</div>
+                    <div class="grid grid-cols-2 gap-1">
+                      <span class="w-3.5 h-3.5 rounded-full bg-sky-500 block"></span>
+                      <span class="w-3.5 h-3.5 rounded-full bg-rose-500 block"></span>
+                      <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 block"></span>
+                      <span class="w-3.5 h-3.5 rounded-full bg-amber-400 block"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preview Card 2: Pastel Skin Feature Showcase -->
+              <div class="rounded-[22px] overflow-hidden border border-slate-200/80 shadow-sm flex flex-col justify-between p-3.5 h-[280px]" style="background-color: ${pal.cardBg};">
+                <div class="rounded-xl bg-white/90 p-3 flex-1 flex flex-col justify-center space-y-2 text-right">
+                  <div class="text-[10px] font-black uppercase" style="color: ${pal.btnBg};">✓ VERIFIED MOD</div>
+                  <div class="font-extrabold text-xs text-slate-900 leading-snug">${app.tagline}</div>
+                  <div class="text-[10px] text-slate-500 font-semibold" dir="ltr">${app.date}</div>
+                </div>
+                <div class="pt-3 space-y-2 text-center">
+                  <div class="text-[10px] font-extrabold tracking-widest uppercase" style="color: ${pal.subText};">DIRECT INSTALL</div>
+                  <div class="flex items-center justify-around py-1">
+                    <div class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-xs font-black" style="color: ${pal.btnBg};">★</div>
+                    <div class="px-2.5 py-1 rounded-full bg-white/80 text-[10px] font-extrabold" style="color: ${pal.btnBg};">100% CLEAN</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- App Description (Like bottom of Screenshot 3) -->
+            <div class="space-y-2 pt-1">
+              <p class="text-[13px] text-slate-700 leading-relaxed font-medium">
+                ${app.desc}
+              </p>
+            </div>
+
+            <!-- Big Download Pill Button -->
+            <button id="sheetBottomDownloadBtn" class="w-full py-3.5 rounded-2xl text-white font-black text-sm shadow-lg tap-active flex items-center justify-center gap-2" style="background-color: ${pal.btnBg};">
+              <span>دابەزاندنی ڕاستەوخۆ (FREE DOWNLOAD)</span>
+            </button>
+          </div>
         `;
-        modal.classList.remove('hidden');
-        document.getElementById('closeNewsModalBtn').addEventListener('click', () => modal.classList.add('hidden'));
+
+        sheet.classList.remove('hidden');
+        document.getElementById('appDetailScroll').scrollTop = 0;
+
+        document.getElementById('closeAppSheetBtn').addEventListener('click', () => {
+          sheet.classList.add('hidden');
+        });
+        document.getElementById('sheetMainDownloadBtn').addEventListener('click', () => {
+          triggerDownload(app);
+        });
+        document.getElementById('sheetBottomDownloadBtn').addEventListener('click', () => {
+          triggerDownload(app);
+        });
       }
 
-      function renderDownloadsAndFavs() {
-        const dlList = document.getElementById('downloadsList');
-        const favList = document.getElementById('favoritesList');
-
-        if (state.downloads.length === 0) {
-          dlList.innerHTML = `<div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/40 text-center text-xs text-slate-400">هیچ ئەپێکت دانەگرتووە</div>`;
-        } else {
-          dlList.innerHTML = state.downloads.map(d => `
-            <div class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/60 flex items-center justify-between text-xs">
-              <div>
-                <div class="font-bold">${d.name}</div>
-                <div class="text-[11px] text-slate-400">${d.version} • ${formatSize(d.sizeMB)}</div>
-              </div>
-              <button data-dl-id="${d.appId}" class="start-dl-btn px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-extrabold">داگرتنەوە</button>
-            </div>
-          `).join('');
+      // Trigger real MediaFire / Telegram download
+      function triggerDownload(app) {
+        if (!state.downloadedIds.includes(app.id)) {
+          state.downloadedIds.unshift(app.id);
+          try {
+            localStorage.setItem('hs_alt_downloaded', JSON.stringify(state.downloadedIds));
+          } catch (e) {}
         }
-
-        const favApps = state.apps.filter(a => state.favorites.includes(a.id));
-        if (favApps.length === 0) {
-          favList.innerHTML = `<div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/40 text-center text-xs text-slate-400">لیستی دڵخوازەکان بەتاڵە</div>`;
-        } else {
-          favList.innerHTML = favApps.map(app => `
-            <div class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/60 flex items-center justify-between text-xs">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 squircle bg-gradient-to-br ${app.gradient} flex items-center justify-center text-white font-bold">${app.iconText}</div>
-                <span class="font-bold">${app.name}</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <button data-dl-id="${app.id}" class="start-dl-btn px-3 py-1 rounded-xl bg-emerald-500 text-slate-950 font-extrabold">داگرتن</button>
-                <button data-fav-id="${app.id}" class="fav-toggle-btn px-2 py-1 rounded-xl bg-rose-500/15 text-rose-500 font-bold">✕</button>
-              </div>
-            </div>
-          `).join('');
+        showToast(`دابەزاندنی ${app.name} دەستی پێکرد...`);
+        if (app.url && app.url.startsWith('http')) {
+          window.open(app.url, '_blank', 'noopener');
         }
+        if (state.activeTab === 'myapps') renderMyApps();
       }
 
-      // Export updated single-file HTML ready to push to GitHub!
-      function exportUpdatedHtmlFile() {
-        const currentHtml = document.documentElement.outerHTML;
-        const newDataBlock =
-          '/*DATA_START*/\n' +
-          '      const DEFAULT_ADMIN_PASS = ' + JSON.stringify(state.adminPass) + ';\n\n' +
-          '      const DEFAULT_APPS = ' + JSON.stringify(state.apps, null, 2) + ';\n\n' +
-          '      const DEFAULT_NEWS = ' + JSON.stringify(state.news, null, 2) + ';\n' +
-          '      /*DATA_END*/';
+      // Switch Bottom Tabs
+      function switchTab(tabName) {
+        state.activeTab = tabName;
+        document.getElementById('appDetailSheet').classList.add('hidden');
 
-        const updatedHtml = '<!DOCTYPE html>\n' + currentHtml.replace(/\/\*DATA_START\*\/[\s\S]*?\/\*DATA_END\*\//, newDataBlock);
-        const blob = new Blob([updatedHtml], { type: 'text/html;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'index.html';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('فایلی نوێی index.html داگیرا! لە GitHub دایبنێ 💾');
-      }
+        ['browse', 'sources', 'news', 'myapps', 'settings'].forEach(t => {
+          const sec = document.getElementById('tab-' + t);
+          if (sec) sec.classList.toggle('hidden', t !== tabName);
+        });
 
-      function openStudioForApp(appToEdit) {
-        const studioModal = document.getElementById('studioModal');
-        const addAppForm = document.getElementById('addAppForm');
-        const addNewsForm = document.getElementById('addNewsForm');
-        addAppForm.classList.remove('hidden');
-        addNewsForm.classList.add('hidden');
-        document.getElementById('studioTabAppBtn').className = 'py-2 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950';
-        document.getElementById('studioTabNewsBtn').className = 'py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300';
+        document.querySelectorAll('.alt-nav-btn').forEach(btn => {
+          const active = btn.getAttribute('data-tab') === tabName;
+          btn.className = 'alt-nav-btn flex flex-col items-center justify-center py-1 ' +
+            (active ? 'text-[#0d747c] font-extrabold' : 'text-[#8e8e93] font-semibold');
+        });
 
-        if (appToEdit) {
-          document.getElementById('editAppId').value = appToEdit.id;
-          document.getElementById('newAppName').value = appToEdit.name;
-          document.getElementById('newAppCat').value = appToEdit.category;
-          document.getElementById('newAppIcon').value = appToEdit.iconText || '';
-          document.getElementById('newAppVer').value = appToEdit.version;
-          document.getElementById('newAppSize').value = appToEdit.sizeMB;
-          document.getElementById('newAppModTag').value = appToEdit.modTag;
-          document.getElementById('newAppUrl').value = appToEdit.downloadUrl;
-          document.getElementById('newAppDesc').value = appToEdit.description;
-        } else {
-          addAppForm.reset();
-          document.getElementById('editAppId').value = '';
-        }
-        studioModal.classList.remove('hidden');
-      }
+        document.getElementById('mainScrollViewport').scrollTop = 0;
 
-      function openStudioForNews(newsToEdit) {
-        const studioModal = document.getElementById('studioModal');
-        const addAppForm = document.getElementById('addAppForm');
-        const addNewsForm = document.getElementById('addNewsForm');
-        addNewsForm.classList.remove('hidden');
-        addAppForm.classList.add('hidden');
-        document.getElementById('studioTabNewsBtn').className = 'py-2 rounded-xl text-xs font-extrabold bg-emerald-500 text-slate-950';
-        document.getElementById('studioTabAppBtn').className = 'py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300';
-
-        if (newsToEdit) {
-          document.getElementById('editNewsId').value = newsToEdit.id;
-          document.getElementById('newNewsTitle').value = newsToEdit.title;
-          document.getElementById('newNewsBody').value = newsToEdit.body;
-        } else {
-          addNewsForm.reset();
-          document.getElementById('editNewsId').value = '';
-        }
-        studioModal.classList.remove('hidden');
+        if (tabName === 'browse') renderBrowse();
+        if (tabName === 'sources') renderSources();
+        if (tabName === 'news') renderNews();
+        if (tabName === 'myapps') renderMyApps();
       }
 
       function initEvents() {
-        document.getElementById('themeToggleBtn').addEventListener('click', () => {
-          state.theme = state.theme === 'dark' ? 'light' : 'dark';
-          storage.set('hs_theme_v4', state.theme);
-    
-      // ==================== 1-FINGER ANDROID WEBVIEW TOUCH SCROLL ENGINE ====================
-      // Fixes Android WebView / SwipeRefreshLayout / ScrollView wrappers that intercept 1-finger vertical swipes
-      function initOneFingerTouchScroll() {
-        let startX = 0;
-        let startY = 0;
-        let lastY = 0;
-        let lastTime = 0;
-        let velocityY = 0;
-        let lockAxis = null; // 'v' for vertical, 'h' for horizontal
-        let activeScroller = null;
-        let momentumId = null;
-        let isTouching = false;
-
-        function stopMomentum() {
-          if (momentumId) {
-            cancelAnimationFrame(momentumId);
-            momentumId = null;
-          }
-        }
-
-        function scrollTargetBy(dy) {
-          if (activeScroller) {
-            activeScroller.scrollTop += dy;
-          } else {
-            window.scrollBy(0, dy);
-          }
-        }
-
-        document.addEventListener('touchstart', function (e) {
-          stopMomentum();
-          if (e.touches.length !== 1) {
-            isTouching = false;
-            lockAxis = null;
-            return;
-          }
-          isTouching = true;
-          lockAxis = null;
-          velocityY = 0;
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-          lastY = startY;
-          lastTime = performance.now();
-          activeScroller = e.target.closest('.modal-sheet');
-        }, { passive: true });
-
-        document.addEventListener('touchmove', function (e) {
-          if (!isTouching || e.touches.length !== 1) return;
-
-          const curX = e.touches[0].clientX;
-          const curY = e.touches[0].clientY;
-          const totalDx = Math.abs(curX - startX);
-          const totalDy = Math.abs(curY - startY);
-
-          if (!lockAxis) {
-            if (totalDx > 7 && totalDx > totalDy * 1.15) {
-              // Horizontal swipe (e.g. featured carousel or category pills): let native horizontal swipe work
-              lockAxis = 'h';
-              return;
-            } else if (totalDy > 5) {
-              lockAxis = 'v';
-            } else {
-              return;
-            }
-          }
-
-          if (lockAxis === 'v') {
-            // Calling preventDefault() forces Android WebView to call requestDisallowInterceptTouchEvent(true)
-            // on the parent Android container so 1-finger vertical scroll is never blocked!
-            if (e.cancelable) {
-              e.preventDefault();
-            }
-            const now = performance.now();
-            const dt = Math.max(now - lastTime, 8);
-            const stepY = lastY - curY;
-
-            scrollTargetBy(stepY);
-
-            const instantVel = stepY / dt;
-            velocityY = velocityY * 0.65 + instantVel * 0.35;
-            lastY = curY;
-            lastTime = now;
-          }
-        }, { passive: false });
-
-        function onTouchEnd() {
-          if (!isTouching) return;
-          isTouching = false;
-
-          if (lockAxis === 'v' && Math.abs(velocityY) > 0.12) {
-            let currentVel = velocityY * 16; // pixels per 16ms frame
-            const scrollerRef = activeScroller;
-
-            function momentumStep() {
-              if (Math.abs(currentVel) < 0.5) {
-                momentumId = null;
-                return;
-              }
-              if (scrollerRef) {
-                scrollerRef.scrollTop += currentVel;
-              } else {
-                window.scrollBy(0, currentVel);
-              }
-              currentVel *= 0.94; // smooth friction
-              momentumId = requestAnimationFrame(momentumStep);
-            }
-            momentumId = requestAnimationFrame(momentumStep);
-          }
-          lockAxis = null;
-        }
-
-        document.addEventListener('touchend', onTouchEnd, { passive: true });
-        document.addEventListener('touchcancel', onTouchEnd, { passive: true });
-      }
-
-      initOneFingerTouchScroll();
-      applyTheme();
+        // Bottom Nav clicks
+        document.querySelectorAll('.alt-nav-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            switchTab(btn.getAttribute('data-tab'));
+          });
         });
 
-        let logoTapCount = 0;
-        let logoTapTimer = null;
-        document.getElementById('brandLogoTrigger').addEventListener('click', () => {
-          logoTapCount += 1;
-          if (logoTapTimer) clearTimeout(logoTapTimer);
-          if (logoTapCount >= 5) {
-            logoTapCount = 0;
-            if (!state.isAdmin) {
-              document.getElementById('adminLoginModal').classList.remove('hidden');
-            }
-          } else {
-            logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 1200);
-          }
-        });
-
-        document.getElementById('adminLockBtn').addEventListener('click', () => {
-          document.getElementById('adminLoginModal').classList.remove('hidden');
-          document.getElementById('adminPassInput').focus();
-        });
-
-        document.getElementById('closeAdminLoginBtn').addEventListener('click', () => {
-          document.getElementById('adminLoginModal').classList.add('hidden');
-        });
-
-        document.getElementById('adminLoginForm').addEventListener('submit', e => {
-          e.preventDefault();
-          const entered = document.getElementById('adminPassInput').value.trim();
-          if (entered === state.adminPass) {
-            state.isAdmin = true;
-            document.getElementById('adminPassInput').value = '';
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            updateAdminUI();
-            showToast('بەخێربێیت حەمەسادی! دۆخی بەڕێوەبەر چالاک کرا 👑');
-          } else {
-            showToast('❌ وشەی نهێنی هەڵەیە!');
-          }
-        });
-
-        document.getElementById('adminLogoutBtn').addEventListener('click', () => {
-          state.isAdmin = false;
-          updateAdminUI();
-          showToast('لە دۆخی بەڕێوەبەر دەرچوویت 🔒');
-        });
-
-        document.getElementById('changePassBtn').addEventListener('click', () => {
-          document.getElementById('changePassModal').classList.remove('hidden');
-        });
-        document.getElementById('closeChangePassBtn').addEventListener('click', () => {
-          document.getElementById('changePassModal').classList.add('hidden');
-        });
-        document.getElementById('changePassForm').addEventListener('submit', e => {
-          e.preventDefault();
-          const np = document.getElementById('newAdminPassInput').value.trim();
-          if (!np) return;
-          state.adminPass = np;
-          storage.set('hs_admin_pass_v4', np);
-          document.getElementById('newAdminPassInput').value = '';
-          document.getElementById('changePassModal').classList.add('hidden');
-          showToast('وشەی نهێنی گۆڕدرا 🔑');
-        });
-
-        document.getElementById('downloadUpdatedHtmlBtn').addEventListener('click', exportUpdatedHtmlFile);
-
-        const searchInput = document.getElementById('searchInput');
+        // Search input in Browse
+        const searchInput = document.getElementById('browseSearchInput');
         const clearSearchBtn = document.getElementById('clearSearchBtn');
         searchInput.addEventListener('input', e => {
           state.searchQuery = e.target.value;
           clearSearchBtn.classList.toggle('hidden', !state.searchQuery);
-          renderFeatured();
-          if (state.activeTab === 'news') renderNews();
-          else if (state.activeTab === 'games') renderGamesHub();
-          else renderApps();
+          renderBrowse();
         });
 
         clearSearchBtn.addEventListener('click', () => {
           state.searchQuery = '';
           searchInput.value = '';
           clearSearchBtn.classList.add('hidden');
-          renderFeatured();
-          renderApps();
-          renderGamesHub();
-          renderNews();
+          renderBrowse();
         });
 
-        document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-          state.searchQuery = '';
-          state.selectedCat = 'all';
-          searchInput.value = '';
-          clearSearchBtn.classList.add('hidden');
-          updateCategoryPills();
-          renderFeatured();
-          renderApps();
+        // Show all toggle in Browse
+        document.getElementById('toggleShowAllBrowseBtn').addEventListener('click', () => {
+          state.showAllBrowse = !state.showAllBrowse;
+          renderBrowse();
         });
 
-        document.getElementById('categoryFilterBar').addEventListener('click', e => {
-          const btn = e.target.closest('.cat-btn');
-          if (!btn) return;
-          state.selectedCat = btn.getAttribute('data-cat');
-          updateCategoryPills();
-          renderFeatured();
-          renderApps();
-        });
-
-        document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        // Category cards in Browse
+        document.querySelectorAll('.cat-card-btn').forEach(btn => {
           btn.addEventListener('click', () => {
-            const tab = btn.getAttribute('data-tab');
-            if (tab === 'downloads') document.getElementById('navDlDot').classList.add('hidden');
-            switchTab(tab);
+            state.selectedCat = btn.getAttribute('data-cat');
+            renderBrowse();
+            document.getElementById('mainScrollViewport').scrollTo({ top: 0, behavior: 'smooth' });
           });
         });
 
-        document.querySelector('main').addEventListener('click', e => {
-          const dlBtn = e.target.closest('.start-dl-btn');
-          if (dlBtn) {
-            startDownload(dlBtn.getAttribute('data-dl-id'));
-            return;
-          }
-
-          const detailBtn = e.target.closest('.open-detail-btn');
-          if (detailBtn) {
-            openAppDetail(detailBtn.getAttribute('data-detail-id'));
-            return;
-          }
-
-          const favBtn = e.target.closest('.fav-toggle-btn');
-          if (favBtn) {
-            toggleFavorite(favBtn.getAttribute('data-fav-id'));
-            return;
-          }
-
-          const readNewsBtn = e.target.closest('.read-news-btn');
-          if (readNewsBtn) {
-            openNewsDetail(readNewsBtn.getAttribute('data-read-news'));
-            return;
-          }
-
-          const editAppBtn = e.target.closest('.edit-app-btn');
-          if (editAppBtn && state.isAdmin) {
-            const app = state.apps.find(a => a.id === editAppBtn.getAttribute('data-edit-app'));
-            if (app) openStudioForApp(app);
-            return;
-          }
-
-          const delAppBtn = e.target.closest('.del-app-btn');
-          if (delAppBtn && state.isAdmin) {
-            const id = delAppBtn.getAttribute('data-del-app');
-            state.apps = state.apps.filter(a => a.id !== id);
-            storage.set('hs_apps_v4', state.apps);
-            renderFeatured();
-            renderApps();
-            renderGamesHub();
-            showToast('ئەپەکە سڕایەوە 🗑️');
-            return;
-          }
-
-          const editNewsBtn = e.target.closest('.edit-news-btn');
-          if (editNewsBtn && state.isAdmin) {
-            const item = state.news.find(n => n.id === editNewsBtn.getAttribute('data-edit-news'));
-            if (item) openStudioForNews(item);
-            return;
-          }
-
-          const delNewsBtn = e.target.closest('.del-news-btn');
-          if (delNewsBtn && state.isAdmin) {
-            const id = delNewsBtn.getAttribute('data-del-news');
-            state.news = state.news.filter(n => n.id !== id);
-            storage.set('hs_news_v4', state.news);
-            renderNews();
-            showToast('هەواڵەکە سڕایەوە 🗑️');
-          }
+        // Clear category filter
+        document.getElementById('clearCatFilterBtn').addEventListener('click', () => {
+          state.selectedCat = null;
+          renderBrowse();
         });
 
-        document.getElementById('clearCompletedDlBtn').addEventListener('click', () => {
-          state.downloads = [];
-          storage.set('hs_downloads_v4', []);
-          renderDownloadsAndFavs();
-          showToast('لیستی داگرتن پاککرایەوە');
-        });
-
-        const studioModal = document.getElementById('studioModal');
-        const addAppForm = document.getElementById('addAppForm');
-        const addNewsForm = document.getElementById('addNewsForm');
-
-        document.getElementById('openStudioBtn').addEventListener('click', () => {
-          if (!state.isAdmin) return;
-          openStudioForApp(null);
-        });
-
-        document.getElementById('closeStudioModalBtn').addEventListener('click', () => {
-          studioModal.classList.add('hidden');
-        });
-
-        document.getElementById('studioTabAppBtn').addEventListener('click', () => openStudioForApp(null));
-        document.getElementById('studioTabNewsBtn').addEventListener('click', () => openStudioForNews(null));
-
-        addAppForm.addEventListener('submit', e => {
-          e.preventDefault();
-          if (!state.isAdmin) return;
-          const editId = document.getElementById('editAppId').value;
-          const name = document.getElementById('newAppName').value.trim();
-          const category = document.getElementById('newAppCat').value;
-          const iconText = (document.getElementById('newAppIcon').value.trim() || name.slice(0, 2)).toUpperCase();
-          const version = document.getElementById('newAppVer').value.trim();
-          const sizeMB = parseFloat(document.getElementById('newAppSize').value) || 50;
-          const modTag = document.getElementById('newAppModTag').value.trim();
-          const downloadUrl = document.getElementById('newAppUrl').value.trim();
-          const description = document.getElementById('newAppDesc').value.trim();
-
-          if (editId) {
-            const idx = state.apps.findIndex(a => a.id === editId);
-            if (idx > -1) {
-              state.apps[idx] = { ...state.apps[idx], name, category, iconText, version, sizeMB, modTag, downloadUrl, description };
-            }
-            showToast('گۆڕانکارییەکان پاشەکەوت کران ✅');
-          } else {
-            state.apps.unshift({
-              id: 'hs-app-' + Date.now(),
-              name,
-              category,
-              iconText,
-              version,
-              sizeMB,
-              featured: true,
-              modTag,
-              gradient: 'from-emerald-500 to-teal-900',
-              downloadUrl,
-              description
-            });
-            showToast('ئەپی نوێ زیاد کرا 🎉');
-          }
-
-          storage.set('hs_apps_v4', state.apps);
-          studioModal.classList.add('hidden');
-          switchTab('store');
-        });
-
-        addNewsForm.addEventListener('submit', e => {
-          e.preventDefault();
-          if (!state.isAdmin) return;
-          const editId = document.getElementById('editNewsId').value;
-          const title = document.getElementById('newNewsTitle').value.trim();
-          const body = document.getElementById('newNewsBody').value.trim();
-
-          if (editId) {
-            const idx = state.news.findIndex(n => n.id === editId);
-            if (idx > -1) {
-              state.news[idx] = { ...state.news[idx], title, body };
-            }
-            showToast('هەواڵەکە نوێکرایەوە ✅');
-          } else {
-            state.news.unshift({
-              id: 'news-' + Date.now(),
-              title,
-              date: new Date().toLocaleDateString('ckb'),
-              body
-            });
-            showToast('هەواڵی نوێ بڵاوکرایەوە 📰');
-          }
-
-          storage.set('hs_news_v4', state.news);
-          studioModal.classList.add('hidden');
-          switchTab('news');
-        });
-
-        ['appDetailModal', 'newsDetailModal', 'studioModal', 'adminLoginModal', 'changePassModal'].forEach(mid => {
-          const el = document.getElementById(mid);
-          el.addEventListener('click', e => {
-            if (e.target === el) el.classList.add('hidden');
+        // My Apps sub-filter bar
+        document.getElementById('myAppsFilterBar').addEventListener('click', e => {
+          const btn = e.target.closest('.myfilter-btn');
+          if (!btn) return;
+          state.myAppsFilter = btn.getAttribute('data-myfilter');
+          document.querySelectorAll('.myfilter-btn').forEach(b => {
+            const active = b.getAttribute('data-myfilter') === state.myAppsFilter;
+            b.className = 'myfilter-btn px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap ' +
+              (active ? 'font-extrabold bg-[#0d747c] text-white' : 'font-bold bg-[#efeff4] text-slate-600');
           });
+          renderMyApps();
+        });
+
+        // Clear download history in Settings
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+          state.downloadedIds = [];
+          try { localStorage.removeItem('hs_alt_downloaded'); } catch (e) {}
+          showToast('تۆماری داگرتنەکان پاککرایەوە');
+        });
+
+        // Delegated clicks inside mainScrollViewport
+        document.getElementById('mainScrollViewport').addEventListener('click', e => {
+          const quickDl = e.target.closest('.quick-dl-btn');
+          if (quickDl) {
+            e.stopPropagation();
+            const app = APPS.find(a => a.id === quickDl.getAttribute('data-dl-id'));
+            if (app) triggerDownload(app);
+            return;
+          }
+
+          const appRow = e.target.closest('.open-app-row');
+          if (appRow) {
+            openAppDetailSheet(appRow.getAttribute('data-app-id'));
+            return;
+          }
+
+          const gotoBtn = e.target.closest('.goto-tab-btn');
+          if (gotoBtn) {
+            switchTab(gotoBtn.getAttribute('data-goto-tab'));
+          }
         });
       }
 
-      function updateCategoryPills() {
-        document.querySelectorAll('.cat-btn').forEach(b => {
-          const active = b.getAttribute('data-cat') === state.selectedCat;
-          b.className = 'cat-btn tap-scale px-3.5 py-2 rounded-2xl text-xs whitespace-nowrap ' +
-            (active
-              ? 'font-extrabold bg-emerald-500 text-slate-950 shadow-sm'
-              : 'font-bold bg-white dark:bg-[#131b2e] border border-slate-200/80 dark:border-white/[0.06] text-slate-700 dark:text-slate-300');
-        });
-      }
-
-      applyTheme();
       initEvents();
-      renderFeatured();
-      renderApps();
-      renderGamesHub();
+      renderBrowse();
+      renderSources();
+      renderNews();
+      renderMyApps();
     })();
   </script>
 </body>
-  </html>
+</html>
